@@ -1,0 +1,102 @@
+<% if (settings.stripe.enabled == true) { %>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>Buy - <%= settings.name %></title>
+        <% if (settings.api.arcio.enabled == true) { %>
+        <script async src="https://arc.io/widget.min.js#<%= settings.api.arcio.widgetid %>"></script>
+        <% } %>
+        
+        <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+        <link rel="icon" href="https://images-ext-1.discordapp.net/external/sMKkyuJo8Wn_AK_Foyl0aGrWwhe9fbqtPgkThvHxdxs/%3Fsize%3D1024/https/cdn.discordapp.com/icons/933803406513012807/bb763a3db98f9f0ae8d6029e8355dd06.png" type="image/png">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+        <link rel="stylesheet" href="/assets/Argon-Dark/vendor/nucleo/css/nucleo.css" type="text/css">
+        <link rel="stylesheet" href="/assets/Argon-Dark/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
+        <link rel="stylesheet" href="/assets/Argon-Dark/css/argon.css?v=1.2.0" type="text/css">
+        <script src="https://kit.fontawesome.com/b97ffc16ff.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+       <%- include('./parts/mainnav') %>
+       <%- include('./parts/header') %>
+    <%- include('./parts/ads') %>
+          <%- include('./parts/widgets') %>
+              <div class="card">
+                <div class="card-header border-0">
+                  <div class="row align-items-center">
+                  <h1>Buy Coins</h1>          
+                </div>
+                <div class="row">
+                  <div class="col-md-6 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <form class="forms-sample">
+                            <form action="/buycoins">
+                                <div class="form-group">
+                                  <label for="INPUTAmount">Amount ($1/<%= settings.stripe.coins %> coins)</label>
+                                  <input style="border-radius: 15px; padding: 8px;" type="number" class="form-control" id="Amount" placeholder="25" name="amount">
+                                </div>
+                                <div class="form-group">
+                                  <label for="InputNumber">Credit Card Number:</label>
+                                  <input style="border-radius: 15px; padding: 8px;" type="text" class="form-control" id="InputNumber" name="number" placeholder="00000000000000">
+                                </div>
+                                <div class="form-group">
+                                  <label for="InputCV">CVC:</label>
+                                  <input style="border-radius: 15px; padding: 8px;" type="text" class="form-control" id="InputCVV" name="cvc" placeholder="000">
+                                </div>
+                                <div class="form-group">
+                                  <label for="InputExpir">Expiration Date:</label>
+                                  <center>
+                                  <div class="row mx-auto">
+                                  <select style="border-radius: 15px; padding: 8px;" class="form-control mx-auto" style="width:45% !important;" name="month"><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option><option value="7">7th</option><option value="8">8th</option><option value="9">9th</option><option value="10">10th</option><option value="11">11th</option><option value="12">12th</option></select><br><br>
+                                  <select style="border-radius: 15px; padding: 8px;" class="form-control mx-auto" style="width:45% !important;" name="year"><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option><option value="2031">2031</option><option value="2032">2032</option><option value="2033">2033</option></select>
+                                  </div>
+                                  </center>
+                                 <br>
+                                  <button class="btn btn-primary btn-lg text-white" type="submit">Buy</button>
+                              </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   </div>      
+                </div>  
+            </div>  
+        </div>  
+    <%- include('./parts/footer') %>
+    </div>
+    </div>
+    <script src="/assets/Argon-Dark/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/Argon-Dark/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/Argon-Dark/vendor/js-cookie/js.cookie.js"></script>
+    <script src="/assets/Argon-Dark/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+    <script src="/assets/Argon-Dark/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+    <script src="/assets/Argon-Dark/vendor/chart.js/dist/Chart.min.js"></script>
+    <script src="/assets/Argon-Dark/vendor/chart.js/dist/Chart.extension.js"></script>
+    <script src="/assets/Argon-Dark/js/argon.js?v=1.2.0"></script>
+</body>
+</html>  
+</div>
+</div>
+        <!-- Plugin js for this page -->
+        <script src="/assets/vendors/select2/select2.min.js"></script>
+        <script src="/assets/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+        <script>
+          async function gift() {
+            let id = encodeURIComponent(document.getElementById("ID").value);
+            let coins = encodeURIComponent(document.getElementById("coins").value);
+            document.location.href = `/gift/coins?id=${id}&coins=${coins}`;
+          };
+        </script>
+        <!-- End plugin js for this page -->
+        <!-- endinject -->
+    
+        <!-- Custom js for this page -->
+        <script src="/assets/js/file-upload.js"></script>
+        <script src="/assets/js/typeahead.js"></script>
+        <script src="/assets/js/select2.js"></script>
+        <!-- End custom js for this page -->
+      </body>
+    </html>
+    <% } %>

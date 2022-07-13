@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>J4R - <%= settings.name %></title>
+    <% if (settings.api.arcio.enabled == true) { %>
+    <script async src="https://arc.io/widget.min.js#<%= settings.api.arcio.widgetid %>"></script>
+    <% } %>
+     
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+    <link rel="icon" href="https://images-ext-1.discordapp.net/external/sMKkyuJo8Wn_AK_Foyl0aGrWwhe9fbqtPgkThvHxdxs/%3Fsize%3D1024/https/cdn.discordapp.com/icons/933803406513012807/bb763a3db98f9f0ae8d6029e8355dd06.png" type="image/png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="/assets/Argon-Dark/vendor/nucleo/css/nucleo.css" type="text/css">
+    <link rel="stylesheet" href="/assets/Argon-Dark/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/Argon-Dark/css/argon.css?v=1.2.0" type="text/css">
+    <script src="https://kit.fontawesome.com/b97ffc16ff.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+   <%- include('./parts/mainnav') %>
+   <%- include('./parts/header') %>                  
+   <div class="card">
+    <div class="card-header border-0">
+      <div class="row align-items-center">
+       <h1>Join For Rewards</h1>          
+        </div>
+          <div class="row"> 
+            <% for (var i = 0; i < settings.api.client.j4r.ads.length; i++) { %>
+                <div class="col-md-6 grid-margin stretch-card">
+                  <div class="card">
+                     <div class="card-body">
+                      <h4 class="card-title"><%= settings.api.client.j4r.ads[i].name %></h4>
+                      <p class="card-description"> Join this server to receive: <br> <%= settings.api.client.j4r.ads[i].coins %> Coins </p>
+                      <form class="forms-sample">
+                         <a role="button" class="btn btn-primary btn-lg" href="<%= settings.api.client.j4r.ads[i].invite %>" target="_blank">Join Server</a> <a class="btn btn-primary btn-lg" href="../login?redirect=j4r">Claim reward</a>
+                      </form>
+                     </div>
+                  </div>
+                 </div>
+               <% } %>
+            </div>
+         </div>
+          <%- include('./parts/footer') %>
+        </div>
+        </div>
+        <script src="/assets/Argon-Dark/vendor/jquery/dist/jquery.min.js"></script>
+        <script src="/assets/Argon-Dark/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="/assets/Argon-Dark/vendor/js-cookie/js.cookie.js"></script>
+        <script src="/assets/Argon-Dark/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+        <script src="/assets/Argon-Dark/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+        <script src="/assets/Argon-Dark/vendor/chart.js/dist/Chart.min.js"></script>
+        <script src="/assets/Argon-Dark/vendor/chart.js/dist/Chart.extension.js"></script>
+        <script src="/assets/Argon-Dark/js/argon.js?v=1.2.0"></script>
+
+</body>
+</html>
