@@ -85,7 +85,7 @@
                         </div>
                     </div>
                     <script>
-                        fetch("https://raw.githubusercontent.com/Hyricon-Development/Faliactyl-v2-new/main/assets/lv.json?token=GHSAT0AAAAAABT3BIWZ23IVGTWFR3EQZHTQYWO74MQ").then(res => Promise.resolve(res.json()).then(lv => {
+                        fetch("https://raw.githubusercontent.com/Hyricon-Development/Faliactyl/main/assets/lv.json?token=GHSAT0AAAAAABT3BIWZ23IVGTWFR3EQZHTQYWO74MQ").then(res => Promise.resolve(res.json()).then(lv => {
                             let version = "<%= settings.version %>"
                             if (version == lv.version) {
                                 document.getElementById("latestversion").innerHTML = `<span>You are running Faliactyl version <code style="color: #007fcc" >v${version}</code>. Faliactyl is up-to-date!</span>`;

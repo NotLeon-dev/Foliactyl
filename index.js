@@ -115,7 +115,7 @@ console.log(chalk.blue("━━━━━━━━━━━━━━━━━━�
 
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
 console.log(chalk.yellow("[Faliactyl] Copyright 2022 ©️ HYRICON DEVELOPMENT"));
-console.log(chalk.yellow("[Github] https://github.com/Hyricon-Development/Faliactyl-v2"));
+console.log(chalk.yellow("[Github] https://github.com/Hyricon-Development/Faliactyl"));
 console.log(chalk.yellow("[Discord] https://discord.hyricon.dev"));
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
 
