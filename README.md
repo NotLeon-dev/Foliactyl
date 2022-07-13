@@ -1,3 +1,5 @@
+![Faliactyl Home Page](https://cdn.discordapp.com/attachments/941008378799489044/996892072655192124/unknown.png)
+
 <hr>
 # Faliactyl V2 • The best Pterodactyl Control Panel
 Making a free or paid host and need a way for users to sign up, earn coins, manage servers? Try out Faliactyl.
@@ -26,6 +28,3 @@ We cannot force you to keep the "Powered by Faliactyl" in the footer, but please
 
 # How to install Faliactyl?
 Check out our [docs](https://docs.hyricon.dev) 
-
-# Preview
-https://cdn.discordapp.com/attachments/993213812809412678/996596171055321139/unknown.png
