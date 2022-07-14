@@ -27,8 +27,14 @@
                                 <i class="fas fa-server text-purple"></i>
                                 <span class="nav-link-text">Servers</span>
                             </a>
-                        </li>
-                        </li><% if (settings.api.arcio["afk page"].enabled == true) { %>
+                        </li><% if (settings.stripe.enabled == true) { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/buy">
+                                    <i class="fa-solid fa-money-bill-transfer"></i>
+                                  <span class="nav-link-text">Buy Coins</span>
+                              </a>
+                          </li><% } %>
+                         <% if (settings.api.arcio["afk page"].enabled == true) { %>
                           <li class="nav-item">
                             <a class="nav-link" href="/afk">
                                 <i class="fas fa-coins text-yellow"></i>
