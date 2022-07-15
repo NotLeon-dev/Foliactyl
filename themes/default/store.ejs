@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/assets/Argon-Dark/vendor/nucleo/css/nucleo.css" type="text/css">
     <link rel="stylesheet" href="/assets/Argon-Dark/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/Argon-Dark/css/argon.css?v=1.2.0" type="text/css">
+    <script src="https://kit.fontawesome.com/b97ffc16ff.js" crossorigin="anonymous"></script>
     
 </head>
 
@@ -159,20 +160,101 @@
                                 </div>
                                 <button type="submit" class="btn btn-outline-default">Buy</button>
                             </form>
+                        <br><br><br><br>
+                            <form action="/buydatabases">
+                                <div class="form-group">
+                                    <label for="buydatabases">Databases</label>
+                                    <select class="form-control" name="amount">
+                                        <option value=1><%= settings.api.client.coins.store.databases.per %> database -
+                                            <%= settings.api.client.coins.store.databases.cost %>
+                                            coin<%= settings.api.client.coins.store.databases.cost == 1 ? "" : "s" %>
+                                        </option>
+                                        <option value=2><%= settings.api.client.coins.store.databases.per * 2 %> databases -
+                                            <%= settings.api.client.coins.store.databases.cost * 2 %> coins</option>
+                                        <option value=3><%= settings.api.client.coins.store.databases.per * 3 %> databases -
+                                            <%= settings.api.client.coins.store.databases.cost * 3 %> coins</option>
+                                        <option value=4><%= settings.api.client.coins.store.databases.per * 4 %> databases -
+                                            <%= settings.api.client.coins.store.databases.cost * 4 %> coins</option>
+                                        <option value=5><%= settings.api.client.coins.store.databases.per * 5 %> databases -
+                                            <%= settings.api.client.coins.store.databases.cost * 5 %> coins</option>
+                                        <option value=6><%= settings.api.client.coins.store.databases.per * 6 %> databases -
+                                            <%= settings.api.client.coins.store.databases.cost * 6 %> coins</option>
+                                        <option value=7><%= settings.api.client.coins.store.databases.per * 7 %> databases -
+                                            <%= settings.api.client.coins.store.databases.cost * 7 %> coins</option>
+                                        <option value=8><%= settings.api.client.coins.store.databases.per * 8 %> databases -
+                                            <%= settings.api.client.coins.store.databases.cost * 8 %> coins</option>
+                                        <option value=9><%= settings.api.client.coins.store.databases.per * 9 %> databases -
+                                            <%= settings.api.client.coins.store.databases.cost * 9 %> coins</option>
+                                        <option value=10><%= settings.api.client.coins.store.databases.per * 10 %> databases
+                                            - <%= settings.api.client.coins.store.databases.cost * 10 %> coins</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-outline-default">Buy</button>
+                            </form>
+                        <br><br><br><br>
+                            <form action="/buybackups">
+                                <div class="form-group">
+                                    <label for="buybackups">Backup Slots</label>
+                                    <select class="form-control" name="amount">
+                                        <option value=1><%= settings.api.client.coins.store.backups.per %> backup -
+                                            <%= settings.api.client.coins.store.backups.cost %>
+                                            coin<%= settings.api.client.coins.store.backups.cost == 1 ? "" : "s" %>
+                                        </option>
+                                        <option value=2><%= settings.api.client.coins.store.backups.per * 2 %> backups -
+                                            <%= settings.api.client.coins.store.backups.cost * 2 %> coins</option>
+                                        <option value=3><%= settings.api.client.coins.store.backups.per * 3 %> backups -
+                                            <%= settings.api.client.coins.store.backups.cost * 3 %> coins</option>
+                                        <option value=4><%= settings.api.client.coins.store.backups.per * 4 %> backups -
+                                            <%= settings.api.client.coins.store.backups.cost * 4 %> coins</option>
+                                        <option value=5><%= settings.api.client.coins.store.backups.per * 5 %> backups -
+                                            <%= settings.api.client.coins.store.backups.cost * 5 %> coins</option>
+                                        <option value=6><%= settings.api.client.coins.store.backups.per * 6 %> backups -
+                                            <%= settings.api.client.coins.store.backups.cost * 6 %> coins</option>
+                                        <option value=7><%= settings.api.client.coins.store.backups.per * 7 %> backups -
+                                            <%= settings.api.client.coins.store.backups.cost * 7 %> coins</option>
+                                        <option value=8><%= settings.api.client.coins.store.backups.per * 8 %> backups -
+                                            <%= settings.api.client.coins.store.backups.cost * 8 %> coins</option>
+                                        <option value=9><%= settings.api.client.coins.store.backups.per * 9 %> backups -
+                                            <%= settings.api.client.coins.store.backups.cost * 9 %> coins</option>
+                                        <option value=10><%= settings.api.client.coins.store.backups.per * 10 %> backups
+                                            - <%= settings.api.client.coins.store.backups.cost * 10 %> coins</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-outline-default">Buy</button>
+                            </form>
+                        <br><br><br><br>
+                            <form action="/buyallocations">
+                                <div class="form-group">
+                                    <label for="buyallocations">Ports</label>
+                                    <select class="form-control" name="amount">
+                                        <option value=1><%= settings.api.client.coins.store.ports.per %> port -
+                                            <%= settings.api.client.coins.store.ports.cost %>
+                                            coin<%= settings.api.client.coins.store.ports.cost == 1 ? "" : "s" %>
+                                        </option>
+                                        <option value=2><%= settings.api.client.coins.store.ports.per * 2 %> ports -
+                                            <%= settings.api.client.coins.store.ports.cost * 2 %> coins</option>
+                                        <option value=3><%= settings.api.client.coins.store.ports.per * 3 %> ports -
+                                            <%= settings.api.client.coins.store.ports.cost * 3 %> coins</option>
+                                        <option value=4><%= settings.api.client.coins.store.ports.per * 4 %> ports -
+                                            <%= settings.api.client.coins.store.ports.cost * 4 %> coins</option>
+                                        <option value=5><%= settings.api.client.coins.store.ports.per * 5 %> ports -
+                                            <%= settings.api.client.coins.store.ports.cost * 5 %> coins</option>
+                                        <option value=6><%= settings.api.client.coins.store.ports.per * 6 %> ports -
+                                            <%= settings.api.client.coins.store.ports.cost * 6 %> coins</option>
+                                        <option value=7><%= settings.api.client.coins.store.ports.per * 7 %> ports -
+                                            <%= settings.api.client.coins.store.ports.cost * 7 %> coins</option>
+                                        <option value=8><%= settings.api.client.coins.store.ports.per * 8 %> ports -
+                                            <%= settings.api.client.coins.store.ports.cost * 8 %> coins</option>
+                                        <option value=9><%= settings.api.client.coins.store.ports.per * 9 %> ports -
+                                            <%= settings.api.client.coins.store.ports.cost * 9 %> coins</option>
+                                        <option value=10><%= settings.api.client.coins.store.ports.per * 10 %> ports
+                                            - <%= settings.api.client.coins.store.ports.cost * 10 %> coins</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-outline-default">Buy</button>
+                            </form>
+                          </div>
                         </div>
-                        <script>
-                            async function submitForm() {
-                                let name = encodeURIComponent(document.getElementById("name").value);
-                                let egg = encodeURIComponent(document.getElementById("egg").value);
-                                let ram = encodeURIComponent(document.getElementById("ram").value);
-                                let disk = encodeURIComponent(document.getElementById("disk").value);
-                                let cpu = encodeURIComponent(document.getElementById("cpu").value);
-                                let location = encodeURIComponent(document.getElementById("location").value);
-                                document.location.href =
-                                    `/create?name=${name}&egg=${egg}&ram=${ram}&disk=${disk}&cpu=${cpu}&location=${location}`;
-                            };
-                        </script>
-
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@ gift:
 
 discordserver:
   enabled: true
-  invitelink: https://youtube.com
+  invitelink: https://discord.com/example
 
 ads:
   enabled: false
@@ -22,17 +22,17 @@ guildblacklist:
   - ServerID
 
 pterodactyl:
-  domain: ""
-  key: ""
+  domain: https://panel.example.com
+  key: Example API Key
 
 linkvertise:
   enabled: true
-  userid: 390178
+  userid: 00000
   coins: 25
 
 status:
   enabled: true
-  script: ""
+  script: https://example.com
 
 stripe:
   enabled: true  
@@ -68,7 +68,7 @@ api:
         RoleID: Package Name 
 
     bot:
-      token: ""
+      token: Example Token
       joinguild:
         enabled: false
         guildid:
@@ -78,7 +78,7 @@ api:
         registeredrole: ""
 
     webhook:
-      webhook_url: ''
+      webhook_url: Example URL
       auditlogs:
         enabled: false
         disabled: []

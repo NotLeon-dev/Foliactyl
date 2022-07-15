@@ -275,8 +275,8 @@ module.exports.load = async function(app, ejs, db) {
         
       let allocations = await db.get("allocations-" + req.session.userinfo.id);
 
-      let per = newsettings.api.client.coins.store.allocations.per * amount;
-      let cost = newsettings.api.client.coins.store.allocations.cost * amount;
+      let per = newsettings.api.client.coins.store.ports.per * amount;
+      let cost = newsettings.api.client.coins.store.ports.cost * amount;
 
       if (usercoins < cost) return res.redirect(failedcallback + "?err=CANNOTAFFORD");
 

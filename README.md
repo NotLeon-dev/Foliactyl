@@ -1,4 +1,4 @@
-![Faliactyl Home Page](https://cdn.discordapp.com/attachments/941008378799489044/996892072655192124/unknown.png)
+![Faliactyl Home Page](https://cdn.discordapp.com/attachments/941008378799489044/996947565637533706/unknown.png)
 
 <hr>
 # Faliactyl V2 • The best Pterodactyl Control Panel
@@ -28,3 +28,4 @@ We cannot force you to keep the "Powered by Faliactyl" in the footer, but please
 
 # How to install Faliactyl?
 Check out our [docs](https://docs.hyricon.dev) 
+</hr>
