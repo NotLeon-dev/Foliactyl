@@ -110,7 +110,7 @@ app.use(express.json({
 
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
 console.log(chalk.red("[Warning] You are running a beta version of Faliactyl"));
-console.log(chalk.red("Please report any bugs to our discord server."));
+console.log(chalk.red("Please report any bugs to our discord server or open a issue in github."));
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
 
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
@@ -121,7 +121,7 @@ console.log(chalk.blue("━━━━━━━━━━━━━━━━━━�
 
 app.listen(settings.website.port, (err) => {
   console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
-  console.log(chalk.yellow(`[Faliactyl] Loaded Website on the port ${settings.website.port}`));
+  console.log(chalk.yellow(`[Faliactyl] Loaded Dashboard on the port ${settings.website.port}`));
   console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
   if (err) console.log(chalk.red(err));
 });
