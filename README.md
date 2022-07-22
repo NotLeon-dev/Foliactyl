@@ -1,11 +1,21 @@
 ![Faliactyl Home Page](https://cdn.discordapp.com/attachments/994323208637517874/997246062706294945/unknown.png)
 
-<hr>
-# Faliactyl V2 • The best Pterodactyl Control Panel
+<br>
+Faliactyl V2 • The best Pterodactyl Control Panel
 Making a free or paid host and need a way for users to sign up, earn coins, manage servers? Try out Faliactyl.
 To get started, scroll down and follow the guide
 
-All features:
+**v2.1.0 adds:**
+- Coin Leaderboard
+- AFK Party/Party Mode system
+- A complete remade of API system (API docs will soon be made)
+- Fixed Linkvertise bypass exploits
+- Fixed minero.cc bug
+- Moved servers to dashboard page and removed servers category
+- Updated stats 
+And a few other changes.
+
+# All features:
 - Resource Management (gift, use it to create servers, etc)
 - Coins (AFK Page earning, Join for Rewards)
 - Coupons (Gives resources & coins to a user)
