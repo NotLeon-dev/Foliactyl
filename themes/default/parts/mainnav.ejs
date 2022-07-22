@@ -21,12 +21,15 @@
                                 <i class="fas fa-plus text-green"></i>
                                 <span class="nav-link-text">Create instance</span>
                             </a>
+<<<<<<< Updated upstream
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/servers">
                                 <i class="fas fa-server text-purple"></i>
                                 <span class="nav-link-text">instances</span>
                             </a>
+=======
+>>>>>>> Stashed changes
                         </li><% if (settings.stripe.enabled == true) { %>
                             <li class="nav-item">
                                 <a class="nav-link" href="/buy">
@@ -55,8 +58,8 @@
                                 <span class="nav-link-text">Join For Rewards</span>
                                 </a>
                             </li><% } %>
-                          <% if (settings.gift.enabled == true) { %>
-                        <li class="nav-item">
+                            <% if (settings.api.client.allow.gift.enabled == true) { %>
+                                <li class="nav-item">
                             <a class="nav-link" href="/gift">
                                 <i class="fas fa-gift text-primary"></i>
                                 <span class="nav-link-text">Gift</span>

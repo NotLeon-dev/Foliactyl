@@ -1,16 +1,13 @@
 name: Faliactyl
 defaulttheme: default
-version: 2.0.0
+version: 2.1.0
 website:
   port: 8080
   secret: Example Secret
 
-gift:
-  enabled: true
-
 discordserver:
   enabled: true
-  invitelink: https://discord.com/example
+  invitelink: https://discord.gg/example
 
 ads:
   enabled: false
@@ -23,19 +20,25 @@ guildblacklist:
 
 pterodactyl:
   domain: https://panel.example.com
-  key: Example API Key
+  key: EXAMPLE API KEY
+
+AFK Party: 
+  enabled: true
+  webhook: https://discord.com/api/webhooks/example/example
+  users: 25
+  multiplier: 2	
 
 linkvertise:
   enabled: true
-  userid: 00000
+  userid: 000000
   coins: 25
 
 status:
-  enabled: true
+  enabled: false
   script: https://example.com
 
 stripe:
-  enabled: true  
+  enabled: false  
   key: 0000000000 # Replace this with your Stripe API Key
   coins: 200 # Coins per amount in USD
   amount: 1
@@ -48,6 +51,9 @@ smtp:
   password: Example Password
 
 api:
+  server:
+    enabled: true
+    key: API KEY
   client:
     j4r: 
       enabled: true
@@ -68,7 +74,7 @@ api:
         RoleID: Package Name 
 
     bot:
-      token: Example Token
+      token: EXAMPLE BOT TOKEN
       joinguild:
         enabled: false
         guildid:
@@ -78,9 +84,9 @@ api:
         registeredrole: ""
 
     webhook:
-      webhook_url: Example URL
+      webhook_url: https://discord.com/api/webhooks/example/example
       auditlogs:
-        enabled: false
+        enabled: true
         disabled: []
 
     passwordgenerator:
@@ -88,6 +94,7 @@ api:
       length: 8
 
     allow:
+      gift: true
       newusers: true
       regen: true
       server:
@@ -102,9 +109,9 @@ api:
         cost: 0
 
     oauth2:
-      id: ""
-      secret: ""
-      link: ""
+      id: "EXAMPLE OAUTH2 ID"
+      secret: "EXAMPLE OAUTH2 SECRET"
+      link: "http://dash.example.com"
       callbackpath: "/callback"
       prompt: true
 
@@ -188,11 +195,11 @@ api:
 
   arcio:
     enabled: false
-    widgetid: Arc Widget ID
+    widgetid: Example WidgetID
     afk page:
       enabled: true
       path: afkwspath
-      every: 60
+      every: 10
       coins: 1
 
 widget:

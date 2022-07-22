@@ -5,8 +5,10 @@
 const fs = require("fs");
 const fetch = require('node-fetch');
 const chalk = require("chalk");
+const figlet = require('figlet')
 const yaml = require('js-yaml');
-const arciotext = (require("./api/arcio.js")).text;
+const glob = require('glob');
+const arciotext = (require("./routes/arcio.js")).text;
 
 // Load settings.
 
@@ -22,47 +24,9 @@ const defaultthemesettings = {
   variables: {}
 };
 
-module.exports.renderdataeval =
-  `(async () => {
-    const JavaScriptObfuscator = require('javascript-obfuscator');
-    let renderdata = {
-      req: req,
-      settings: settings,
-      userinfo: req.session.userinfo,
-      packagename: req.session.userinfo ? await db.get("package-" + req.session.userinfo.id) ? await db.get("package-" + req.session.userinfo.id) : settings.api.client.packages.default : null,
-      extraresources: !req.session.userinfo ? null : (await db.get("extra-" + req.session.userinfo.id) ? await db.get("extra-" + req.session.userinfo.id) : {
-        ram: 0,
-        disk: 0,
-        cpu: 0,
-        servers: 0
-      }),
-      j4r: !req.session.userinfo ? null : (await db.get("j4r-" + req.session.userinfo.id) ? await db.get("j4r-" + req.session.userinfo.id) : {
-        ram: 0,
-        disk: 0,
-        cpu: 0,
-        servers: 0
-      }),
-      packages: req.session.userinfo ? settings.api.client.packages.list[await db.get("package-" + req.session.userinfo.id) ? await db.get("package-" + req.session.userinfo.id) : settings.api.client.packages.default] : null,
-      coins: settings.api.client.coins.enabled == true ? (req.session.userinfo ? (await db.get("coins-" + req.session.userinfo.id) ? await db.get("coins-" + req.session.userinfo.id) : 0) : null) : null,
-      pterodactyl: req.session.pterodactyl,
-      theme: theme.name,
-      extra: theme.settings.variables
-    };
-    if (settings.api.arcio.enabled == true && req.session.arcsessiontoken) {
-      renderdata.arcioafktext = JavaScriptObfuscator.obfuscate(\`
-        let token = "\${req.session.arcsessiontoken}";
-        let everywhat = \${settings.api.arcio["afk page"].every};
-        let gaincoins = \${settings.api.arcio["afk page"].coins};
-        let arciopath = "\${settings.api.arcio["afk page"].path.replace(/\\\\/g, "\\\\\\\\").replace(/"/g, "\\\\\\"")}";
-        \${arciotext}
-      \`);
-    };
-    return renderdata;
-  })();`;
-
 // Load database
 
-const db = require('./handlers/database')
+const db = require('./handlers/database');
 module.exports.db = db;
 
 // Load websites.
@@ -109,19 +73,27 @@ app.use(express.json({
 }));
 
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
+<<<<<<< Updated upstream
 console.log(chalk.red("[Warning] You are running a beta version of Faliactyl"));
 console.log(chalk.red("Please report any bugs to our discord server or open a issue in github."));
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
 
+=======
+console.log(chalk.magentaBright(figlet.textSync("Faliactyl")));
+>>>>>>> Stashed changes
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
-console.log(chalk.yellow("[Faliactyl] Copyright 2022 ©️ HYRICON DEVELOPMENT"));
-console.log(chalk.yellow("[Github] https://github.com/Hyricon-Development/Faliactyl"));
-console.log(chalk.yellow("[Discord] https://discord.hyricon.dev"));
+console.log(chalk.magentaBright("[Copyright] © 2022 Hyricon Development"));
+console.log(chalk.magentaBright("[Github] https://github.com/Hyricon-Development/Faliactyl"));
+console.log(chalk.magentaBright("[Discord] https://discord.hyricon.dev"));
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
 
 app.listen(settings.website.port, (err) => {
+<<<<<<< Updated upstream
   console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
   console.log(chalk.yellow(`[Faliactyl] Loaded Dashboard on the port ${settings.website.port}`));
+=======
+  console.log(chalk.magentaBright(`[Faliactyl] Loaded Website on the port ${settings.website.port}`));
+>>>>>>> Stashed changes
   console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
   if (err) console.log(chalk.red(err));
 });
@@ -161,7 +133,9 @@ app.use(async (req, res, next) => {
     "/remove_account": 1,
     "/create_coupon": 1,
     "/revoke_coupon": 1,
-    "/getip": 1
+    "/getip": 1,
+    "/gift/coins": 1,
+    "/gift": 2
   };
 
   if (manager[req._parsedUrl.pathname]) {
@@ -184,14 +158,13 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// Load the API files.
+// Load Routes.
 
-const apifiles = fs.readdirSync('./api').filter(file => file.endsWith('.js'))
-apifiles.push('pages.js') 
-apifiles.forEach(file => { 
-  const apifile = require(`./api/${file}`) 
-  if (typeof apifile.load === 'function') apifile.load(app, ejs, db) 
-})
+const routes = glob.sync('./routes/**/*.js');
+  for (const file of routes) {
+    const routes = require(file);
+    if (typeof routes.load === 'function') routes.load(app, ejs, db);
+}
 
 app.all("*", async (req, res) => {
   if (req.session.pterodactyl) if (req.session.pterodactyl.id !== await db.get("users-" + req.session.userinfo.id)) return res.redirect("/login?prompt=none");
@@ -280,6 +253,60 @@ app.all("*", async (req, res) => {
     res.send(str);
   });
 });
+
+let partymode = ({users: 1, status: false});
+if (settings["AFK Party"].enabled == true) {
+  setInterval( async function () { 
+    fetch('http://localhost:8080/api/afkparty').then(res => Promise.resolve(res.json()).then(afkparty => {
+      partymode = (afkparty)
+    }))
+  }, 5000)
+}
+
+module.exports.renderdataeval =
+  `(async () => {
+    const JavaScriptObfuscator = require('javascript-obfuscator');
+    let renderdata = {
+      req: req,
+      settings: settings,
+      userinfo: req.session.userinfo,
+      packagename: req.session.userinfo ? await db.get("package-" + req.session.userinfo.id) ? await db.get("package-" + req.session.userinfo.id) : settings.api.client.packages.default : null,
+      extraresources: !req.session.userinfo ? null : (await db.get("extra-" + req.session.userinfo.id) ? await db.get("extra-" + req.session.userinfo.id) : {
+        ram: 0,
+        disk: 0,
+        cpu: 0,
+        servers: 0,
+        databases: 0,
+        allocations: 0,
+        backups: 0
+      }),
+      j4r: !req.session.userinfo ? null : (await db.get("j4r-" + req.session.userinfo.id) ? await db.get("j4r-" + req.session.userinfo.id) : {
+        ram: 0,
+        disk: 0,
+        cpu: 0,
+        servers: 0,
+        databases: 0,
+        allocations: 0,
+        backups: 0
+      }),
+      packages: req.session.userinfo ? settings.api.client.packages.list[await db.get("package-" + req.session.userinfo.id) ? await db.get("package-" + req.session.userinfo.id) : settings.api.client.packages.default] : null,
+      coins: settings.api.client.coins.enabled == true ? (req.session.userinfo ? (await db.get("coins-" + req.session.userinfo.id) ? await db.get("coins-" + req.session.userinfo.id) : 0) : null) : null,
+      pterodactyl: req.session.pterodactyl,
+      theme: theme.name,
+      extra: theme.settings.variables
+    };
+    if (typeof(partymode) != "undefined") renderdata.partymode = partymode;
+    if (settings.api.arcio.enabled == true && req.session.arcsessiontoken) {
+      renderdata.arcioafktext = JavaScriptObfuscator.obfuscate(\`
+        let token = "\${req.session.arcsessiontoken}";
+        let everywhat = \${settings.api.arcio["afk page"].every};
+        let gaincoins = \${settings.api.arcio["afk page"].coins};
+        let arciopath = "\${settings.api.arcio["afk page"].path.replace(/\\\\/g, "\\\\\\\\").replace(/"/g, "\\\\\\"")}";
+        \${arciotext}
+      \`);
+    };
+    return renderdata;
+  })();`;
 
 module.exports.get = function(req) {
   let defaulttheme = settings.defaulttheme;

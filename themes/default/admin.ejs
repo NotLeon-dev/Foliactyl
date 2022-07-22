@@ -67,6 +67,23 @@
 					You have created a coupon code with the name of: <%= req.query.code %>
 					</h5>
 				    <% } %>
+                    <%
+            let ram = 0;
+            let disk = 0;
+            let cpu = 0;
+            let databases = 0;
+            let ports = 0;
+            let backups = 0;
+            let servers = pterodactyl.relationships.servers.data.length;
+            for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
+                ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
+                disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
+                cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+                databases = databases + (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.databases == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.databases : 0);
+                ports = ports + (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.allocations == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.allocations : 0);
+                backups = backups + (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.backups == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.backups : 0);
+            }
+        %>
 
 					</div>
                     <div class="row">

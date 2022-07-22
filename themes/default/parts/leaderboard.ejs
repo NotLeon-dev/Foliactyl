@@ -1,0 +1,22 @@
+<div class="col-md-12 grid-margin stretch-card">
+          <div class="card">
+              <div class="card-header">
+                  <div class="card-title">Leaderboard</div>
+              </div>
+              <div class="card-body">
+                  <center><p>Top 5 Earners:<br>#1 - <span id="earner1">Loading...</span><br>#2 - <span id="earner2">Loading...</span><br>#3 - <span id="earner3">Loading...</span><br>#4 - <span id="earner4">Loading...</span><br>#5 - <span id="earner5">Loading...</span><br></p></center>
+              </div>
+          </div>
+      </div>
+  <script>
+      async function updateLeaderboard() {
+          fetch("/api/leaderboard").then(res => Promise.resolve(res.json()).then(leaderboard => {
+              document.getElementById(`earner1`).innerHTML = `${leaderboard[0].username} - ${leaderboard[0].coins} Coins`
+              document.getElementById("earner2").innerHTML = `${leaderboard[1].username} - ${leaderboard[1].coins} Coins`
+              document.getElementById("earner3").innerHTML = `${leaderboard[2].username} - ${leaderboard[2].coins} Coins`
+              document.getElementById("earner4").innerHTML = `${leaderboard[3].username} - ${leaderboard[3].coins} Coins`
+              document.getElementById("earner5").innerHTML = `${leaderboard[4].username} - ${leaderboard[4].coins} Coins`
+          }))
+      }
+      updateLeaderboard();
+  </script>

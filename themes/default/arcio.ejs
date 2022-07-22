@@ -18,31 +18,74 @@
     <script src="https://kit.fontawesome.com/b97ffc16ff.js" crossorigin="anonymous"></script>
       
             <%- include('./parts/widgets') %>
-
 </head>
-
+<script type="module">
+    let party = {};
+    async function partymode() {
+        fetch("http://localhost:8080/api/afkparty").then(res => Promise.resolve(res.json()).then(afkparty => {
+            let party = afkparty
+            document.getElementById("users").innerHTML = afkparty.users;
+        }))
+    }
+    party();
+</script>   
 <body>
+    <%
+            let ram = 0;
+            let disk = 0;
+            let cpu = 0;
+            let databases = 0;
+            let ports = 0;
+            let backups = 0;
+            let servers = pterodactyl.relationships.servers.data.length;
+            for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
+                ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
+                disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
+                cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+                databases = databases + (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.databases == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.databases : 0);
+                ports = ports + (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.allocations == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.allocations : 0);
+                backups = backups + (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.backups == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.backups : 0);
+            }
+        %>
    <%- include('./parts/mainnav') %>
    <%- include('./parts/header') %>
                       <%- include('./parts/ads') %>
         <!-- Page content -->
-        <div class="card">
-									<div class="card-header">
-										<div class="card-title">Earn Coins</div>
-									</div>
-									<div class="card-body">
-										<center><p>Every <% if (settings.api.arcio["afk page"].every !== 1) { %><%= settings.api.arcio["afk page"].every %> seconds<% } else { %>second<% } %>, you will get <%= settings.api.arcio["afk page"].coins == 1 ? "a" : settings.api.arcio["afk page"].coins %> coin<%= settings.api.arcio["afk page"].coins == 1 ? "" : "s" %>.</p></center>
-										<center><p>You will gain coins again in <span id="arciotimer"><%= settings.api.arcio["afk page"].every %></span> seconds.</p></center>
-										<center><p>You have gained <span id="arciogainedcoins">0</span> coins currently</p></center>
-										<script>
-											<%- arcioafktext %>
-										</script>
-									</div>
-        
-                <!-- Footer -->
-  <%- include('./parts/footer') %>
-            </div>
-        </div>
+        <%- include('./parts/leaderboard') %>
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+					<div class="card-header">
+						<div class="card-title">AFK For Coins</div>
+                            </div>
+								<div class="card-body">
+                                    <% if (partymode.status == false) { %>
+									    <center><p>Every <% if (settings.api.arcio["afk page"].every !== 1) { %><%= settings.api.arcio["afk page"].every %> seconds<% } else { %>second<% } %>, you will get <%= settings.api.arcio["afk page"].coins == 1 ? "a" : settings.api.arcio["afk page"].coins %> coin<%= settings.api.arcio["afk page"].coins == 1 ? "" : "s" %>.</p></center>
+                                    <% } else { %>
+                                        <center><p>Every <% if (settings.api.arcio["afk page"].every !== 1) { %><%= settings.api.arcio["afk page"].every %> seconds<% } else { %>second<% } %>, you will get <%= settings.api.arcio["afk page"].coins * settings["AFK Party"].multiplier == 1 ? "a" : settings.api.arcio["afk page"].coins * settings["AFK Party"].multiplier %> coin<%= settings.api.arcio["afk page"].coins * settings["AFK Party"].multiplier == 1 ? "" : "s" %>.</p></center>
+                                    <% } %>
+									    <center><p>You will gain coins again in <span id="arciotimer"><%= settings.api.arcio["afk page"].every %></span> seconds.</p></center>
+									    <span hidden="hidden" id="arciogainedcoins">0</span>
+									<script>
+										<%- arcioafktext %>
+									</script>
+								</div>
+                            </div>
+                        </div>
+                    <% if (settings["AFK Party"].enabled == true) { %>
+                        <div class="col-md-12 grid-margin stretch-card">        
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Party Mode</div>
+                                </div>
+                                    <div class="card-body">
+                                        <center><p>There are <%= partymode.users %> people currently earning.<br>At <%= settings["AFK Party"].users %> people earning, we enable party mode.<br>While party mode is active, there is a <%= settings["AFK Party"].multiplier %>x earning boost.<br><% if (partymode.status == true) { %><br>Party mode is currently ACTIVE.<% }else{ %><br>Party mode is currently INACTIVE.<% } %></p></center>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                    </div>
+            <%- include('./parts/footer') %>
         <script src="/assets/Argon-Dark/vendor/jquery/dist/jquery.min.js"></script>
         <script src="/assets/Argon-Dark/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="/assets/Argon-Dark/vendor/js-cookie/js.cookie.js"></script>

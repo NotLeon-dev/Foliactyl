@@ -206,11 +206,11 @@ module.exports.load = async function(app, ejs, db) {
               return res.send("api.client.bot.joinguild.guildid is not an array nor a string.");
             }
           }
+          
           if (!await db.get("users-" + userinfo.id)) {
             if (newsettings.api.client.allow.newusers == true) {
               let genpassword = null;
-              if (newsettings.api.client.passwordgenerator.signup == true)
-                genpassword = makeid(newsettings.api.client.passwordgenerator["length"]);
+              if (newsettings.api.client.passwordgenerator.signup == true) genpassword = makeid(newsettings.api.client.passwordgenerator["length"]);
               let accountjson = await fetch(
                 settings.pterodactyl.domain + "/api/application/users",
                 {
@@ -264,20 +264,26 @@ module.exports.load = async function(app, ejs, db) {
                   return res.send("An error has occured when attempting to create your account.");
                 };
               };
+              if (settings.smtp.enabled == true) {
+                mailer.sendMail({
+                  from: settings.smtp.mailfrom,
+                  to: userinfo.email,
+                  subject: `Login details for ${settings.name}`,
+                  html: `Here are your login details for ${settings.name} Panel:\n Username: ${userinfo.id}\n Email: ${userinfo.email}\n Password: ${genpassword}`,
+                });
+              }  
             } else {
               return res.send("New users cannot signup currently.");
             }
-            
-            if (settings.smtp.enabled == true) {
-            mailer.sendMail({
-              from: settings.smtp.mailfrom,
-              to: userinfo.email,
-              subject: 'Thanks for signing up',
-              html: `Thanks for signing up to ${settings.name}`,
-            });
           }
+          await db.set(`username-${userinfo.id}`, userinfo.username);
 
-          };
+          let userdb = await db.get("userlist");
+          userdb = userdb ? userdb : [];
+          if(!userdb.includes(`${userinfo.id}`)) {
+              userdb.push(`${userinfo.id}`);
+              await db.set("userlist", userdb);
+          }
 
           let cacheaccount = await fetch(
             settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + userinfo.id)) + "?include=servers",
@@ -290,7 +296,6 @@ module.exports.load = async function(app, ejs, db) {
             return res.send("An error has occured while attempting to get your user information.");
           let cacheaccountinfo = JSON.parse(await cacheaccount.text());
           req.session.pterodactyl = cacheaccountinfo.attributes;
-
           req.session.userinfo = userinfo;
           if (customredirect) return res.redirect(customredirect);
           return res.redirect("/dashboard");

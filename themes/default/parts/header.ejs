@@ -67,7 +67,7 @@
                                     </span>
                                     <div class="media-body  ml-2  d-none d-lg-block">
                                         <span
-                                            class="mb-0 text-sm  font-weight-bold"><%= req.session.userinfo.username%>#<%= req.session.userinfo.discriminator %></span>
+                                            class="mb-0 text-sm  font-weight-bold"><%= req.session.userinfo.username%></span>
                                     </div>
                                 </div>
                             </a>
@@ -98,16 +98,22 @@
                         </div>
                     </div>
                     <%
-                    let ram = 0;
-                    let disk = 0;
-                    let cpu = 0;
-                    let servers = pterodactyl.relationships.servers.data.length;
-                    for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
-                        ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
-                        disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
-                        cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
-                    }
-                %>
+            let ram = 0;
+            let disk = 0;
+            let cpu = 0;
+            let databases = 0;
+            let ports = 0;
+            let backups = 0;
+            let servers = pterodactyl.relationships.servers.data.length;
+            for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
+                ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
+                disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
+                cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+                databases = databases + (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.databases == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.databases : 0);
+                ports = ports + (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.allocations == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.allocations : 0);
+                backups = backups + (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.backups == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.backups : 0);
+            }
+        %>
                     <div class="row">
                         <div class="col-xl-3 col-md-6">
                             <div class="card card-stats">
@@ -195,6 +201,104 @@
                                             <div
                                                 class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
                                                 <i class="fas fa-server"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="mt-3 mb-0 text-sm">
+                                        <span class="text-success mr-2">Fetched</span>
+                                        <span class="text-nowrap">from <strong>API</strong></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card card-stats">
+                                <!-- Card body -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title text-uppercase text-muted mb-0">Databases</h5>
+                                            <span class="h2 font-weight-bold mb-0"><%= databases %> /
+                                                <%= (packages ? packages.databases : 0) + extraresources.databases %>
+                                                server<%= (packages ? packages.databases : 0) + extraresources.databases == 1 ? "" : "s" %></span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div
+                                                class="icon icon-shape bg-gradient-purple text-white rounded-circle shadow">
+                                                <i class="fa-solid fa-database"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="mt-3 mb-0 text-sm">
+                                        <span class="text-success mr-2">Fetched</span>
+                                        <span class="text-nowrap">from <strong>API</strong></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card card-stats">
+                                <!-- Card body -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title text-uppercase text-muted mb-0">Allocations</h5>
+                                            <span class="h2 font-weight-bold mb-0"><%= ports %> /
+                                                <%= (packages ? packages.allocations : 0) + extraresources.allocations %>
+                                                server<%= (packages ? packages.allocations : 0) + extraresources.allocations == 1 ? "" : "s" %></span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div
+                                                class="icon icon-shape bg-gradient-blue text-white rounded-circle shadow">
+                                                <i class="fa-solid fa-network-wired"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="mt-3 mb-0 text-sm">
+                                        <span class="text-success mr-2">Fetched</span>
+                                        <span class="text-nowrap">from <strong>API</strong></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card card-stats">
+                                <!-- Card body -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title text-uppercase text-muted mb-0">Backup Slots</h5>
+                                            <span class="h2 font-weight-bold mb-0"><%= backups %> /
+                                                <%= (packages ? packages.backups : 0) + extraresources.backups %>
+                                                server<%= (packages ? packages.backups : 0) + extraresources.backups == 1 ? "" : "s" %></span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div
+                                                class="icon icon-shape bg-gradient-pink text-white rounded-circle shadow">
+                                                <i class="fa-brands fa-hive"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="mt-3 mb-0 text-sm">
+                                        <span class="text-success mr-2">Fetched</span>
+                                        <span class="text-nowrap">from <strong>API</strong></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card card-stats">
+                                <!-- Card body -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title text-uppercase text-muted mb-0">Package</h5>
+                                            <span class="h2 font-weight-bold mb-0"><%= packagename %></span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div
+                                                class="icon icon-shape bg-gradient-gray text-white rounded-circle shadow">
+                                                <i class="fa-solid fa-box"></i>
                                             </div>
                                         </div>
                                     </div>

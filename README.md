@@ -21,10 +21,9 @@ All features:
 - Mail Server (SMTP support)
 - Linkvertise Earning
 - Role Packages (get packages via roles)
-
-# Warning
-
-We cannot force you to keep the "Powered by Faliactyl" in the footer, but please consider keeping it. It helps getting more visibility to the project and so getting better. We won't do technical support for installations without the notice in the footer.
+- Coin Leaderboard
+- AFK Party/Party Mode
+- API System
 
 # How to install Faliactyl?
 Check out our [docs](https://docs.hyricon.dev) 
