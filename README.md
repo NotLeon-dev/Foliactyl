@@ -5,7 +5,7 @@ Faliactyl V2 • The best Pterodactyl Control Panel
 Making a free or paid host and need a way for users to sign up, earn coins, manage servers? Try out Faliactyl.
 To get started, scroll down and follow the guide
 
-**v2.1.0 adds:**
+# v2.1.0 adds:
 - Coin Leaderboard
 - AFK Party/Party Mode system
 - A complete remade of API system (API docs will soon be made)
