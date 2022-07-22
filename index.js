@@ -73,14 +73,7 @@ app.use(express.json({
 }));
 
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
-<<<<<<< Updated upstream
-console.log(chalk.red("[Warning] You are running a beta version of Faliactyl"));
-console.log(chalk.red("Please report any bugs to our discord server or open a issue in github."));
-console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
-
-=======
 console.log(chalk.magentaBright(figlet.textSync("Faliactyl")));
->>>>>>> Stashed changes
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
 console.log(chalk.magentaBright("[Copyright] © 2022 Hyricon Development"));
 console.log(chalk.magentaBright("[Github] https://github.com/Hyricon-Development/Faliactyl"));
@@ -88,12 +81,7 @@ console.log(chalk.magentaBright("[Discord] https://discord.hyricon.dev"));
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
 
 app.listen(settings.website.port, (err) => {
-<<<<<<< Updated upstream
-  console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
-  console.log(chalk.yellow(`[Faliactyl] Loaded Dashboard on the port ${settings.website.port}`));
-=======
   console.log(chalk.magentaBright(`[Faliactyl] Loaded Website on the port ${settings.website.port}`));
->>>>>>> Stashed changes
   console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
   if (err) console.log(chalk.red(err));
 });
