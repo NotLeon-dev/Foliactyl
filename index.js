@@ -245,7 +245,7 @@ app.all("*", async (req, res) => {
 let partymode = ({users: 1, status: false});
 if (settings["AFK Party"].enabled == true) {
   setInterval( async function () { 
-    fetch('http://localhost:8080/api/afkparty').then(res => Promise.resolve(res.json()).then(afkparty => {
+    fetch(`http://localhost:${settings.website.port}}/api/afkparty`).then(res => Promise.resolve(res.json()).then(afkparty => {
       partymode = (afkparty)
     }))
   }, 5000)
