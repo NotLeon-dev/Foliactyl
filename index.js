@@ -285,7 +285,7 @@ module.exports.renderdataeval =
       extra: theme.settings.variables
     };
     if (typeof(partymode) != "undefined") renderdata.partymode = partymode;
-    if (settings.api.arcio.enabled == true && req.session.arcsessiontoken) {
+    if (typeof(arciotext) != "undefined") if (settings.api.arcio.enabled == true && req.session.arcsessiontoken) {
       renderdata.arcioafktext = JavaScriptObfuscator.obfuscate(\`
         let token = "\${req.session.arcsessiontoken}";
         let everywhat = \${settings.api.arcio["afk page"].every};
