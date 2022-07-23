@@ -1,6 +1,6 @@
 name: Faliactyl
 defaulttheme: default
-version: 2.1.0
+version: 2.1.2
 website:
   port: 8080
   secret: Example Secret
