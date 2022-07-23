@@ -78,10 +78,11 @@ console.log(chalk.blue("━━━━━━━━━━━━━━━━━━�
 console.log(chalk.magentaBright("[Copyright] © 2022 Hyricon Development"));
 console.log(chalk.magentaBright("[Github] https://github.com/Hyricon-Development/Faliactyl"));
 console.log(chalk.magentaBright("[Discord] https://discord.hyricon.dev"));
+console.log(chalk.magentaBright("[Website] https://Hyricon.dev"));
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
 
 app.listen(settings.website.port, (err) => {
-  console.log(chalk.magentaBright(`[Faliactyl] Loaded Website on the port ${settings.website.port}`));
+  console.log(chalk.magentaBright(`[Faliactyl] Loaded Dashboard on the port ${settings.website.port}`));
   console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
   if (err) console.log(chalk.red(err));
 });
