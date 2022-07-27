@@ -21,7 +21,14 @@
                                 <i class="fas fa-plus text-green"></i>
                                 <span class="nav-link-text">Create Instance</span>
                             </a>
-                        </li><% if (settings.stripe.enabled == true) { %>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/servers">
+                                <i class="fa-solid fa-server text-red"></i>
+                                <span class="nav-link-text">Manage Servers</span>
+                            </a>
+                        </li>
+                        <% if (settings.stripe.enabled == true) { %>
                             <li class="nav-item">
                                 <a class="nav-link" href="/buy">
                                     <i class="fa-solid fa-money-bill-transfer"></i>
