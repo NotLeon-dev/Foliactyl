@@ -1,4 +1,5 @@
-![Faliactyl Home Page](https://cdn.discordapp.com/attachments/941008378799489044/1000179869629554870/unknown.png)
+![Faliactyl Login Page](https://cdn.discordapp.com/attachments/998170574843035720/1002296923853692998/unknown.png)
+![Faliactyl Home Page](https://cdn.discordapp.com/attachments/998170574843035720/1002296923459420160/unknown.png)
 
 <br>
 Faliactyl V2 • The best Pterodactyl Control Panel
