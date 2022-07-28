@@ -52,8 +52,8 @@ redirect:
   removeaccountsuccess: "/admin"
 
 pages:
+  register: register.ejs
   dashboard: dashboard.ejs
-  servers: servers.ejs
   servers/new: create.ejs
   servers/edit: edit.ejs
   admin: admin.ejs
@@ -65,10 +65,10 @@ pages:
   status: status.ejs
   lv: linkvertise.ejs
   buy: buy.ejs
+  accounts: accounts.ejs
 
 mustbeloggedin:
   - "/dashboard"
-  - "/servers"
   - "/servers/new"
   - "/servers/edit"
   - "/store"
@@ -79,6 +79,7 @@ mustbeloggedin:
   - "/status"
   - "/lv"
   - "/buy"
+  - "/accounts"
 
 mustbeadmin:
   - "/admin"

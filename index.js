@@ -78,7 +78,7 @@ console.log(chalk.blue("━━━━━━━━━━━━━━━━━━�
 console.log(chalk.magentaBright("[Copyright] © 2022 Hyricon Development"));
 console.log(chalk.magentaBright("[Github] https://github.com/Hyricon-Development/Faliactyl"));
 console.log(chalk.magentaBright("[Discord] https://discord.hyricon.dev"));
-console.log(chalk.magentaBright("[Website] https://Hyricon.dev"));
+console.log(chalk.magentaBright("[Website] https://hyricon.dev"));
 console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
 
 app.listen(settings.website.port, (err) => {
@@ -156,7 +156,7 @@ const routes = glob.sync('./routes/**/*.js');
 }
 
 app.all("*", async (req, res) => {
-  if (req.session.pterodactyl) if (req.session.pterodactyl.id !== await db.get("users-" + req.session.userinfo.id)) return res.redirect("/login?prompt=none");
+  if (req.session.pterodactyl) if (req.session.pterodactyl.id !== await db.get(`users-${req.session.userinfo.id}`)) return res.redirect("/login?prompt=none");
   let theme = indexjs.get(req);
 
   let newsettings = require('./handlers/readSettings').settings();
@@ -182,7 +182,7 @@ app.all("*", async (req, res) => {
       };
 
       let cacheaccount = await fetch(
-        settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + req.session.userinfo.id)) + "?include=servers",
+        `${settings.pterodactyl.domain}/api/application/users/${await db.get(`users-${req.session.userinfo.id}`)}?include=servers`,
         {
           method: "get",
           headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
@@ -246,7 +246,7 @@ app.all("*", async (req, res) => {
 let partymode = ({users: 1, status: false});
 if (settings["AFK Party"].enabled == true) {
   setInterval( async function () { 
-    fetch(`http://localhost:${settings.website.port}/api/afkparty`).then(res => Promise.resolve(res.json()).then(afkparty => {
+    fetch(`${settings.api.client.oauth2.link}/api/afkparty`).then(res => Promise.resolve(res.json()).then(afkparty => {
       partymode = (afkparty)
     }))
   }, 5000)
@@ -326,19 +326,4 @@ module.exports.ratelimits = async function(length) {
 }
 
 // Get a cookie.
-function getCookie(req, cname) {
-  let cookies = req.headers.cookie;
-  if (!cookies) return null;
-  let name = cname + "=";
-  let ca = cookies.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return decodeURIComponent(c.substring(name.length, c.length));
-    }
-  }
-  return "";
-}
+const getCookie = require("./handlers/getCookie");
