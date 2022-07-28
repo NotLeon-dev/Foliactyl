@@ -5,14 +5,12 @@ Faliactyl V2 • The best Pterodactyl Control Panel
 Making a free or paid host and need a way for users to sign up, earn coins, manage servers? Try out Faliactyl.
 To get started, scroll down and follow the guide
 
-# v2.1.0 adds:
-- Coin Leaderboard
-- AFK Party/Party Mode system
-- A complete remade of API system (API docs will soon be made)
-- Fixed Linkvertise bypass exploits
-- Fixed minero.cc bug
-- Moved servers to dashboard page and removed servers category
-- Updated stats 
+# v2.2.0 adds:
+- Email System
+- Accounts System
+- Login/Register Pages
+- Profile Page
+- Gift Resources
 And a few other changes.
 
 # All features:
@@ -26,7 +24,7 @@ And a few other changes.
 - Join for Rewards (join discord servers for coins)
 - Admin (set/add/remove coins & resources, create/revoke coupons)
 - Webhook (Logs actions)
-- Gift Coins (Share coins with anyone)
+- Gift (Share coins/resources with anyone)
 - Stripe API (buy coins via stripe)
 - Mail Server (SMTP support)
 - Linkvertise Earning

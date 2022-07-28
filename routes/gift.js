@@ -1,6 +1,6 @@
 const settings = require('../handlers/readSettings').settings();
 
-if (settings.api.client.allow.gift.enabled == true) {
+if (settings.api.client.allow.gift == true) {
 module.exports.load = async function(app, ejs, db) {
     app.get("/gift/coins", async (req, res) => {
         if (!req.session.pterodactyl) return res.redirect("/login?redirect=gift");
@@ -19,7 +19,7 @@ module.exports.load = async function(app, ejs, db) {
     })
     app.get("/gift/resources", async (req, res) => {
         if (!req.session.pterodactyl) return res.redirect("/login?redirect=gift");
-        if (!req.query.id || !req.query.ram || req.query.disk || req.query.cpu || req.query.databases || req.query.allocations || req.query.backups) return res.redirect("/gift?error=INVALID_INFO");
+        if (!req.query.id || !req.query.ram || !req.query.disk || !req.query.cpu || !req.query.databases || !req.query.allocations || !req.query.backups) return res.redirect("/gift?error=INVALID_INFO");
 
         let userresources = await db.get(`extra-${req.session.userinfo.id}`);
         let userresources2 = await db.get(`extra-${req.query.id}`);

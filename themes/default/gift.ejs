@@ -1,4 +1,4 @@
-<% if (settings.api.client.allow.gift.enabled == true) { %>
+<% if (settings.api.client.allow.gift == true) { %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,14 +52,60 @@
                   <div class="card-body">
                     <form class="forms-sample">
                       <div class="form-group">
-                        <label for="ID">Discord ID</label>
-                        <input type="number" class="form-control" id="ID" placeholder="Enter ID here">
+                        <label for="ID">Email</label>
+                        <input class="form-control" id="ID" placeholder="Enter Email here">
                       </div>
                       <div class="form-group">
                         <label for="coins">Coins</label>
                         <input type="number" class="form-control" id="coins" placeholder="50">
                       </div>
                      <a role="button" class="badge badge-outline-green" style="padding: 12px 30px; font-size: 15px;" href="javascript: gift()">Gift</a>
+                      <br>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+              <h1>Gift Resources</h1>          
+            </div>
+            <div class="row">
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <form class="forms-sample">
+                      <div class="form-group">
+                        <label for="ID">Email</label>
+                        <input class="form-control" id="IDres" placeholder="Enter Email here">
+                      </div>
+                      <div class="form-group">
+                        <label for="coins">RAM</label>
+                        <input type="number" class="form-control" id="ram" placeholder="50">
+                      </div>
+                      <div class="form-group">
+                        <label for="coins">Disk</label>
+                        <input type="number" class="form-control" id="disk" placeholder="50">
+                      </div>
+                      <div class="form-group">
+                        <label for="coins">CPU</label>
+                        <input type="number" class="form-control" id="cpu" placeholder="50">
+                      </div>
+                      <div class="form-group">
+                        <label for="coins">Databases</label>
+                        <input type="number" class="form-control" id="databases" placeholder="50">
+                      </div>
+                      <div class="form-group">
+                        <label for="coins">Allocations</label>
+                        <input type="number" class="form-control" id="allocations" placeholder="50">
+                      </div>
+                      <div class="form-group">
+                        <label for="coins">Backup Slots</label>
+                        <input type="number" class="form-control" id="backups" placeholder="50">
+                      </div>
+                     <a role="button" class="badge badge-outline-green" style="padding: 12px 30px; font-size: 15px;" href="javascript: giftres()">Gift</a>
                       <br>
                     </form>
                   </div>
@@ -94,6 +140,16 @@
         let id = encodeURIComponent(document.getElementById("ID").value);
         let coins = encodeURIComponent(document.getElementById("coins").value);
         document.location.href = `/gift/coins?id=${id}&coins=${coins}`;
+      };
+      async function giftres() {
+        let id = encodeURIComponent(document.getElementById("IDres").value);
+        let ram = encodeURIComponent(document.getElementById("ram").value);
+        let disk = encodeURIComponent(document.getElementById("disk").value);
+        let cpu = encodeURIComponent(document.getElementById("cpu").value);
+        let databases = encodeURIComponent(document.getElementById("databases").value);
+        let allocations = encodeURIComponent(document.getElementById("allocations").value);
+        let backups = encodeURIComponent(document.getElementById("backups").value);
+        document.location.href = `/gift/resources?id=${id}&ram=${ram}&disk=${disk}&cpu=${cpu}&databases=${databases}&allocations=${allocations}&backups=${backups}`;
       };
     </script>
     <!-- End plugin js for this page -->
