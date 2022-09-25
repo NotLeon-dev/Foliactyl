@@ -1,13 +1,14 @@
 name: Faliactyl
+icon: https://cdn.discordapp.com/attachments/998170574843035720/1003467646769057882/unknown.png
 defaulttheme: default
-version: 2.2.0
+version: 3.0.0
 website:
   port: 8080
   secret: Example Secret
 
 discordserver:
   enabled: true
-  invitelink: https://discord.gg/example
+  invitelink: https://discord.com/example
 
 ads:
   enabled: false
@@ -19,26 +20,34 @@ guildblacklist:
   - ServerID
 
 pterodactyl:
-  domain: https://panel.example.com
-  key: EXAMPLE API KEY
+  domain: Domain
+  key: Key
+
+storelimits:
+  ram: 8192
+  disk: 16384
+  cpu: 400
+  databases: 4
+  allocations: 4
+  backups: 4
 
 AFK Party: 
   enabled: true
-  webhook: https://discord.com/api/webhooks/example/example
-  users: 25
+  webhook: ""
+  users: 1
   multiplier: 2	
 
 linkvertise:
   enabled: true
-  userid: 000000
+  userid: 390178
   coins: 25
 
 status:
-  enabled: false
+  enabled: true
   script: https://example.com
 
 stripe:
-  enabled: false  
+  enabled: true  
   key: 0000000000 # Replace this with your Stripe API Key
   coins: 200 # Coins per amount in USD
   amount: 1
@@ -74,7 +83,7 @@ api:
         RoleID: Package Name 
 
     bot:
-      token: EXAMPLE BOT TOKEN
+      token: ""
       joinguild:
         enabled: false
         guildid:
@@ -84,7 +93,7 @@ api:
         registeredrole: ""
 
     webhook:
-      webhook_url: https://discord.com/api/webhooks/example/example
+      webhook_url: ""
       auditlogs:
         enabled: true
         disabled: []
@@ -102,23 +111,17 @@ api:
         modify: true
         delete: true
 
-      overresourcessuspend: false # Enable this to suspend the server if the user edits the server resources
-      renewsuspendsystem:
-        enabled: false
-        time: 3600
-        cost: 0
-
-    oauth2:
-      id: "EXAMPLE OAUTH2 ID"
-      secret: "EXAMPLE OAUTH2 SECRET"
-      link: "http://dash.example.com"
+    oauth2: # Discord OAUTH2
+      id: ""
+      secret: ""
+      link: "http://localhost:8080"
       callbackpath: "/callback"
       prompt: true
-
-      ip:
-        trust x-forwarded-for: true
-        block: []
-        duplicate check: false
+    
+    ip:
+      trust x-forwarded-for: true
+      block: []
+      duplicate check: false
 
     packages:
       default: default
@@ -134,34 +137,55 @@ api:
 
     locations:
       '1':
-        name: Example Location 1
-        package: null
-      '2':
-        name: Example Location 2
+        name: 🇮🇳 - Banglore
         package: null
 
     eggs:
-      paper:
-        display: Minecraft Java
+      MetricNodes Software:
+        display: MetricNodes Software
         minimum:
-          ram: 1024
-          disk: 1024
-          cpu: 100
+          ram: 512
+          disk: 512
+          cpu: 25
         maximum:
-          ram: 2000
-          disk: 2000
-          cpu: 2000
+          ram: 8000
+          disk: 16000
+          cpu: 400
         info:
-          egg: 3
-          docker_image: ghcr.io/pterodactyl/yolks:java_17
-          startup: java -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true
-            -jar {{SERVER_JARFILE}}
+          egg: 15
+          docker_image: quay.io/devil38/catactyl:multiarch
+          startup: ./minecraft.sh
           environment:
-            SERVER_JARFILE: server.jar
-            BUILD_NUMBER: latest
+            NODEJS_VERSION: "14"
+            PYTHON_VERSION: ""
+            MAPNAME: Ancient
+            OVERRIDE_PASSWORD: change-test
+            SERVER_NAME: RAGE:MP Unofficial server
+            MAX_PLAYERS: "50"
+            ANNOUNCE: "0"
+            REDIS_PASSWORD: replace-this
+            FILE_TRANSFER: ""
+            JAVA_ARGUMENT: ""
+            COMPILE_FOLDER: ""
+            GENERIC_BOT_FILE: ""
+            GENERIC_PACKAGE: ""
+            HTTP_PORT: ""
+            ASE_PORT: ""
+            T_MAX_PLAYERS: ""
+            T_DIFFICULTY: ""
+            MOTD: ""
+            T_LANGUAGE: ""
+            T_WORLD_NAME: ""
+            T_WORLD_SIZE: ""
+            MINDUSTRY_SERVER_NAME: ""
+            MINIO_STARTUP_TYPE: ""
+            TEA_QUERY_PORT: ""
+            TEA_FILE_PORT: ""
+            JAVA_VERSION_SELECT: "17"
+            SRCDS_MAP: ""
           feature_limits:
-            databases: 4
-            backups: 4
+            databases: 0
+            backups: 0
 
     coins:
       enabled: true
@@ -194,13 +218,37 @@ api:
     key: Minero Public Key
 
   arcio:
-    enabled: false
-    widgetid: Example WidgetID
+    enabled: true
+    widgetid: VmfQD6oE
     afk page:
       enabled: true
       path: afkwspath
       every: 10
       coins: 1
+      coinlimit: 50 # Daily coin limit, set to 0 if you want to disable it.
+
+whitelist:
+  enabled: false
+  users:
+    - Email Address
+
+nologin:
+  enabled: true # Suspends and Deletes servers if the user doesn't login for amount of days.
+  days: 7
+
+servercreation:
+  cost: 0
+
+renewal: 
+  enabled: false
+  cost: 200
+  delay: 3 
+
+AntiVPN:
+  enabled: true
+  key: KEY
+  whitelistedIPs:
+    - IP Address
 
 widget:
   enabled: false

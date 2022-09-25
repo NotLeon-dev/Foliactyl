@@ -1,7 +1,9 @@
 const indexjs = require("../index.js");
 const adminjs = require("./admin.js");
+const settings = require("../handlers/readSettings").settings();
 
-module.exports.load = async function(app, ejs, db) {
+const db = require("../handlers/database")
+module.exports.load = async function(app, ejs, olddb) {
   app.get("/buyram", async (req, res) => {
     let newsettings = await enabledCheck(req, res);
     if (newsettings) {
@@ -22,6 +24,8 @@ module.exports.load = async function(app, ejs, db) {
       usercoins = usercoins ? usercoins : 0;
         
       let ram = await db.get("ram-" + req.session.userinfo.id);
+
+      if (ram + amount > settings.storelimits.ram) return res.redirect(failedcallback + "?err=MAXRAMEXCEETED");
 
       let per = newsettings.api.client.coins.store.ram.per * amount;
       let cost = newsettings.api.client.coins.store.ram.cost * amount;
@@ -85,6 +89,8 @@ module.exports.load = async function(app, ejs, db) {
 
       let disk = await db.get("disk-" + req.session.userinfo.id);
 
+      if (disk + amount > settings.storelimits.disk) return res.redirect(failedcallback + "?err=MAXDISKEXCEETED");
+
       let per = newsettings.api.client.coins.store.disk.per * amount;
       let cost = newsettings.api.client.coins.store.disk.cost * amount;
 
@@ -146,6 +152,8 @@ module.exports.load = async function(app, ejs, db) {
       usercoins = usercoins ? usercoins : 0;
         
       let cpu = await db.get("cpu-" + req.session.userinfo.id);
+
+      if (cpu + amount > settings.storelimits.cpu) return res.redirect(failedcallback + "?err=MAXCPUEXCEETED");
         
       let per = newsettings.api.client.coins.store.cpu.per * amount;
       let cost = newsettings.api.client.coins.store.cpu.cost * amount;
@@ -209,6 +217,8 @@ module.exports.load = async function(app, ejs, db) {
         
       let databases = await db.get("databases-" + req.session.userinfo.id);        
 
+      if (databases + amount > settings.storelimits.databases) return res.redirect(failedcallback + "?err=MAXDATABASESEXCEETED");
+
       let per = newsettings.api.client.coins.store.databases.per * amount;
       let cost = newsettings.api.client.coins.store.databases.cost * amount;
 
@@ -271,6 +281,8 @@ module.exports.load = async function(app, ejs, db) {
         
       let allocations = await db.get("allocations-" + req.session.userinfo.id);
 
+      if (allocations + amount > settings.storelimits.allocations) return res.redirect(failedcallback + "?err=MAXALLOCATIONSEXCEETED");
+
       let per = newsettings.api.client.coins.store.ports.per * amount;
       let cost = newsettings.api.client.coins.store.ports.cost * amount;
 
@@ -332,6 +344,8 @@ module.exports.load = async function(app, ejs, db) {
       usercoins = usercoins ? usercoins : 0;
         
       let backups = await db.get("backups-" + req.session.userinfo.id);
+
+      if (backups + amount > settings.storelimits.backups) return res.redirect(failedcallback + "?err=MAXBACKUPSEXCEETED");
         
       let per = newsettings.api.client.coins.store.backups.per * amount;
       let cost = newsettings.api.client.coins.store.backups.cost * amount;
@@ -394,6 +408,8 @@ module.exports.load = async function(app, ejs, db) {
       usercoins = usercoins ? usercoins : 0;
         
       let servers = await db.get("servers-" + req.session.userinfo.id);
+
+      if (servers + amount > settings.storelimits.servers) return res.redirect(failedcallback + "?err=MAXSERVERSEXCEETED");
         
       let per = newsettings.api.client.coins.store.servers.per * amount;
       let cost = newsettings.api.client.coins.store.servers.cost * amount;

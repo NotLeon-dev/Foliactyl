@@ -27,12 +27,4 @@ module.exports = {
 
       return true;
     },
-
-    async getCoinLeaderboard(limit) {
-      let leaderboard = db.prepare(`SELECT * FROM table where Name like '%coins' LIMIT ${limit};`);
-
-      leaderboard = leaderboard.map(r => JSON.parse(JSON.stringify(r)))
-
-      return leaderboard;
-    }
 };

@@ -2,14 +2,14 @@ const settings = require('../handlers/readSettings').settings();
 const fetch = require('node-fetch');
 const indexjs = require("../index.js");
 const adminjs = require("./admin.js");
-const renew = require("./renewal.js");
-const fs = require("fs");
+const chalk = require("chalk")
 
 if (settings.pterodactyl) if (settings.pterodactyl.domain) {
   if (settings.pterodactyl.domain.slice(-1) == "/") settings.pterodactyl.domain = settings.pterodactyl.domain.slice(0, -1);
 };
 
-module.exports.load = async function(app, ejs, db) {
+const db = require("../handlers/database")
+module.exports.load = async function(app, ejs, olddb) {
   app.get("/updateinfo", async (req, res) => {
     if (!req.session.pterodactyl) return res.redirect("/login")
     let cacheaccount = await fetch(
@@ -35,7 +35,6 @@ module.exports.load = async function(app, ejs, db) {
     let newsettings = require('../handlers/readSettings').settings();
     if (newsettings.api.client.allow.server.create == true) {
       let redirectlink = theme.settings.redirect.failedcreateserver || "/"; // fail redirect link
-      
       if (req.query.name && req.query.ram && req.query.disk && req.query.cpu && req.query.databases && req.query.ports && req.query.backups && req.query.egg && req.query.location) {
         try {
           decodeURIComponent(req.query.name)
@@ -122,6 +121,8 @@ module.exports.load = async function(app, ejs, db) {
             if (egginfo.maximum.disk) if (disk > egginfo.maximum.disk) return res.redirect(`${redirectlink}?err=TOOMUCHDISK&num=${egginfo.maximum.disk}`);
             if (egginfo.maximum.cpu) if (cpu > egginfo.maximum.cpu) return res.redirect(`${redirectlink}?err=TOOMUCHCPU&num=${egginfo.maximum.cpu}`);
           }
+          let coins = await db.get(`coins-${req.session.userinfo.id}`)
+          if (settings.servercreation.cost > coins) return res.redirect(`${redirectlink}?err=NOTENOUGHCOINS`);
   
           let specs = egginfo.info;
           specs["user"] = (await db.get("users-" + req.session.userinfo.id));
@@ -156,19 +157,20 @@ module.exports.load = async function(app, ejs, db) {
             console.log(await serverinfo.text());
             return res.redirect(`${redirectlink}?err=ERRORONCREATE`);
           }
+          await db.set(`coins-${req.session.userinfo.id}`, (coins - settings.servercreation.cost));
           let serverinfotext = JSON.parse(await serverinfo.text());
           let newpterodactylinfo = req.session.pterodactyl;
           newpterodactylinfo.relationships.servers.data.push(serverinfotext);
           req.session.pterodactyl = newpterodactylinfo;
-          if (settings.api.client.allow.renewsuspendsystem.enabled == true) {
-            renew.set(serverinfotext.attributes.id);
+          if (settings.renewal.enabled == true) {
+            await db.set(`renewal-${serverinfotext.attributes.id}`, Date.now())
           }
           if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("SERVER")) {
             let params = JSON.stringify({
                 embeds: [
                     {
                         title: "Server Created",
-                        description: `**__User:__** ${req.session.userinfo.username}#${req.session.userinfo.discriminator} (${req.session.userinfo.id})\n\n**__Configuration:__**\n**Name:** ${name}\n**Ram:** ${ram}MB\n**Disk:** ${disk}MB\n**CPU:** ${cpu}%\n**DATABASES:** ${databases}%\n**PORTS:** ${ports}%\n**BACKUPS:** ${backups}%\n**Egg:** ${egg}\n**Location:** ${location}`,
+                        description: `**__User:__** ${req.session.userinfo.username}#${req.session.userinfo.discriminator} (${req.session.userinfo.id})\n\n**__Configuration:__**\n**Name:** ${name}\n**Ram:** ${ram}MB\n**Disk:** ${disk}MB\n**CPU:** ${cpu}%\n**DATABASES:** ${databases}\n**PORTS:** ${ports}\n**BACKUPS:** ${backups}\n**Egg:** ${egg}\n**Location:** ${location}`,
                         color: hexToDecimal("#FE0023")
                     }
                 ]
@@ -352,11 +354,10 @@ module.exports.load = async function(app, ejs, db) {
     let theme = indexjs.get(req);
 
     let newsettings = require('../handlers/readSettings').settings();
-    if (newsettings.api.client.allow.server.delete == true) {
       if (req.session.pterodactyl.relationships.servers.data.filter(server => server.attributes.id == req.query.id).length == 0) return res.send("Could not find server with that ID.");
 
       let deletionresults = await fetch(
-        settings.pterodactyl.domain + "/api/application/servers/" + req.query.id,
+        `${settings.pterodactyl.domain}/api/application/servers/${req.query.id}`,
         {
           method: "delete",
           headers: {
@@ -366,19 +367,12 @@ module.exports.load = async function(app, ejs, db) {
         }
       );
       let ok = await deletionresults.ok;
-      if (ok !== true) return res.send("An error has occur while attempting to delete the server.");
+      if (ok == false) return res.send("An error has occur while attempting to delete the server.");
       let pterodactylinfo = req.session.pterodactyl;
       pterodactylinfo.relationships.servers.data = pterodactylinfo.relationships.servers.data.filter(server => server.attributes.id.toString() !== req.query.id);
       req.session.pterodactyl = pterodactylinfo;
-
-      if (settings.api.client.allow.renewsuspendsystem.enabled == true) {
-        renew.delete(req.query.id);
-      }
-
-      adminjs.suspend(req.session.userinfo.id);
-
-      res.redirect(theme.settings.redirect.deleteserver || "/");
-
+      if (settings.renewal.enabled == true) await db.delete(`renewal-${req.query.id}`)
+      
       if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("SERVER")) {
         let params = JSON.stringify({
             embeds: [
@@ -396,10 +390,7 @@ module.exports.load = async function(app, ejs, db) {
             },
             body: params
         }).catch(e => console.warn(chalk.red("[WEBSITE] There was an error sending to the webhook: " + e)));
-    }
-  
-    } else {
-      res.redirect(theme.settings.redirect.deleteserverdisabled || "/");
+        return res.redirect("/dashboard?success=deleteserver")
     }
   });
 };

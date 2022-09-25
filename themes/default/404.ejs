@@ -1,66 +1,622 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />  
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel='shortcut icon' type='image/x-icon' href='https://images-ext-1.discordapp.net/external/sMKkyuJo8Wn_AK_Foyl0aGrWwhe9fbqtPgkThvHxdxs/%3Fsize%3D1024/https/cdn.discordapp.com/icons/933803406513012807/bb763a3db98f9f0ae8d6029e8355dd06.png' />
-    <title><%= settings.name %></title>
-    <!-- Simple bar CSS -->
-    <link rel="stylesheet" href="/assets/Argon-Dark/css/simplebar.css">
-    <!-- Fonts CSS -->
-    <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <!-- Icons CSS -->
-    <link rel="stylesheet" href="/assets/Argon-Dark/css/feather.css">
-    <!-- Date Range Picker CSS -->
-    <link rel="stylesheet" href="/assets/Argon-Dark/css/daterangepicker.css">
-    <!-- App CSS -->
-    <link rel="stylesheet" href="/assets/Argon-Dark/css/app-light.css" id="lightTheme">
-    <link rel="stylesheet" href="/assets/Argon-Dark/css/app-dark.css" id="darkTheme" disabled>
+<html lang="en" >
 
-        <%- include('./parts/widgets') %>
+<head>
+
+  <meta charset="UTF-8">
+  
+
+
+
+
+  <link rel="icon" type="image/png" href="<%= settings.name %>"/>
+  <title><%= settings.name %></title>
+  <% if (settings.api.arcio.enabled == true) { %>
+      <script async src="https://arc.io/widget.min.js#<%= settings.api.arcio.widgetid %>"></script>
+  <% } %>
+  <script src="../../assets/faliactyl/assets/js/config.js"></script>
+    		<script src="../../assets/faliactyl/vendors/overlayscrollbars/OverlayScrollbars.min.js"></script>
+    
+  <!-- ===============================================-->
+			<!--    Stylesheets-->
+			<!-- ===============================================-->
+			<link href="../../assets/faliactyl/vendors/choices/choices.min.css" rel="stylesheet">
+			<link href="../../assets/faliactyl/vendors/prism/prism-okaidia.css" rel="stylesheet">
+			<link rel="preconnect" href="https://fonts.gstatic.com">
+			<link
+				href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap"
+				rel="stylesheet">
+			<link href="../../assets/faliactyl/vendors/overlayscrollbars/OverlayScrollbars.min.css" rel="stylesheet">
+			<link href="../../assets/faliactyl/assets/css/theme-rtl.min.css" rel="stylesheet" id="style-rtl">
+			<link href="../../assets/faliactyl/assets/css/theme.min.css" rel="stylesheet" id="style-default">
+			<link href="../../assets/faliactyl/assets/css/user-rtl.min.css" rel="stylesheet" id="user-style-rtl">
+			<link href="../../assets/faliactyl/assets/css/user.min.css" rel="stylesheet" id="user-style-default">
+			<script>
+				var isRTL = JSON.parse(localStorage.getItem('isRTL'));
+				if (isRTL) {
+					var linkDefault = document.getElementById('style-default');
+					var userLinkDefault = document.getElementById('user-style-default');
+					linkDefault.setAttribute('disabled', true);
+					userLinkDefault.setAttribute('disabled', true);
+					document.querySelector('html').setAttribute('dir', 'rtl');
+				} else {
+					var linkRTL = document.getElementById('style-rtl');
+					var userLinkRTL = document.getElementById('user-style-rtl');
+					linkRTL.setAttribute('disabled', true);
+					userLinkRTL.setAttribute('disabled', true);
+				}
+			</script>
+  
+  
+  
+<style>
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  background: linear-gradient(90deg, #2f3640 23%, #181b20 100%);
+}
+
+.moon {
+  background: linear-gradient(90deg, #d0d0d0 48%, #919191 100%);
+  position: absolute;
+  top: -100px;
+  left: -300px;
+  width: 900px;
+  height: 900px;
+  content: "";
+  border-radius: 100%;
+  box-shadow: 0px 0px 30px -4px rgba(0, 0, 0, 0.5);
+}
+
+.moon__crater {
+  position: absolute;
+  content: "";
+  border-radius: 100%;
+  background: linear-gradient(90deg, #7a7a7a 38%, #c3c3c3 100%);
+  opacity: 0.6;
+}
+
+.moon__crater1 {
+  top: 250px;
+  left: 500px;
+  width: 60px;
+  height: 180px;
+}
+
+.moon__crater2 {
+  top: 650px;
+  left: 340px;
+  width: 40px;
+  height: 80px;
+  transform: rotate(55deg);
+}
+
+.moon__crater3 {
+  top: -20px;
+  left: 40px;
+  width: 65px;
+  height: 120px;
+  transform: rotate(250deg);
+}
+
+.star {
+  background: grey;
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  content: "";
+  border-radius: 100%;
+  transform: rotate(250deg);
+  opacity: 0.4;
+  animation-name: shimmer;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes shimmer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.7;
+  }
+}
+.star1 {
+  top: 40%;
+  left: 50%;
+  animation-delay: 1s;
+}
+
+.star2 {
+  top: 60%;
+  left: 90%;
+  animation-delay: 3s;
+}
+
+.star3 {
+  top: 10%;
+  left: 70%;
+  animation-delay: 2s;
+}
+
+.star4 {
+  top: 90%;
+  left: 40%;
+}
+
+.star5 {
+  top: 20%;
+  left: 30%;
+  animation-delay: 0.5s;
+}
+
+.error {
+  position: absolute;
+  left: 100px;
+  top: 400px;
+  transform: translateY(-60%);
+  font-family: "Righteous", cursive;
+  color: #363e49;
+}
+
+.error__title {
+  font-size: 10em;
+}
+
+.error__subtitle {
+  font-size: 2em;
+}
+
+.error__description {
+  opacity: 0.5;
+}
+
+.error__button {
+  min-width: 7em;
+  margin-top: 3em;
+  margin-right: 0.5em;
+  padding: 0.5em 2em;
+  outline: none;
+  border: 2px solid #2f3640;
+  background-color: transparent;
+  border-radius: 8em;
+  color: #576375;
+  cursor: pointer;
+  transition-duration: 0.2s;
+  font-size: 0.75em;
+  font-family: "Righteous", cursive;
+}
+
+.error__button:hover {
+  color: #21252c;
+}
+
+.error__button--active {
+  background-color: #e67e22;
+  border: 2px solid #e67e22;
+  color: white;
+}
+
+.error__button--active:hover {
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.astronaut {
+  position: absolute;
+  width: 185px;
+  height: 300px;
+  left: 70%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(20deg) scale(1.2);
+}
+
+.astronaut__head {
+  background-color: white;
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  width: 60px;
+  height: 60px;
+  content: "";
+  border-radius: 2em;
+}
+
+.astronaut__head-visor-flare1 {
+  background-color: #7f8fa6;
+  position: absolute;
+  top: 28px;
+  left: 40px;
+  width: 10px;
+  height: 10px;
+  content: "";
+  border-radius: 2em;
+  opacity: 0.5;
+}
+
+.astronaut__head-visor-flare2 {
+  background-color: #718093;
+  position: absolute;
+  top: 40px;
+  left: 38px;
+  width: 5px;
+  height: 5px;
+  content: "";
+  border-radius: 2em;
+  opacity: 0.3;
+}
+
+.astronaut__backpack {
+  background-color: #bfbfbf;
+  position: absolute;
+  top: 90px;
+  left: 47px;
+  width: 86px;
+  height: 90px;
+  content: "";
+  border-radius: 8px;
+}
+
+.astronaut__body {
+  background-color: #e6e6e6;
+  position: absolute;
+  top: 115px;
+  left: 55px;
+  width: 70px;
+  height: 80px;
+  content: "";
+  border-radius: 8px;
+}
+
+.astronaut__body__chest {
+  background-color: #d9d9d9;
+  position: absolute;
+  top: 140px;
+  left: 68px;
+  width: 45px;
+  height: 25px;
+  content: "";
+  border-radius: 6px;
+}
+
+.astronaut__arm-left1 {
+  background-color: #e6e6e6;
+  position: absolute;
+  top: 127px;
+  left: 9px;
+  width: 65px;
+  height: 20px;
+  content: "";
+  border-radius: 8px;
+  transform: rotate(-30deg);
+}
+
+.astronaut__arm-left2 {
+  background-color: #e6e6e6;
+  position: absolute;
+  top: 102px;
+  left: 7px;
+  width: 20px;
+  height: 45px;
+  content: "";
+  border-radius: 8px;
+  transform: rotate(-12deg);
+  border-top-left-radius: 8em;
+  border-top-right-radius: 8em;
+}
+
+.astronaut__arm-right1 {
+  background-color: #e6e6e6;
+  position: absolute;
+  top: 113px;
+  left: 100px;
+  width: 65px;
+  height: 20px;
+  content: "";
+  border-radius: 8px;
+  transform: rotate(-10deg);
+}
+
+.astronaut__arm-right2 {
+  background-color: #e6e6e6;
+  position: absolute;
+  top: 78px;
+  left: 141px;
+  width: 20px;
+  height: 45px;
+  content: "";
+  border-radius: 8px;
+  transform: rotate(-10deg);
+  border-top-left-radius: 8em;
+  border-top-right-radius: 8em;
+}
+
+.astronaut__arm-thumb-left {
+  background-color: #e6e6e6;
+  position: absolute;
+  top: 110px;
+  left: 21px;
+  width: 10px;
+  height: 6px;
+  content: "";
+  border-radius: 8em;
+  transform: rotate(-35deg);
+}
+
+.astronaut__arm-thumb-right {
+  background-color: #e6e6e6;
+  position: absolute;
+  top: 90px;
+  left: 133px;
+  width: 10px;
+  height: 6px;
+  content: "";
+  border-radius: 8em;
+  transform: rotate(20deg);
+}
+
+.astronaut__wrist-left {
+  background-color: #e67e22;
+  position: absolute;
+  top: 122px;
+  left: 6.5px;
+  width: 21px;
+  height: 4px;
+  content: "";
+  border-radius: 8em;
+  transform: rotate(-15deg);
+}
+
+.astronaut__wrist-right {
+  background-color: #e67e22;
+  position: absolute;
+  top: 98px;
+  left: 141px;
+  width: 21px;
+  height: 4px;
+  content: "";
+  border-radius: 8em;
+  transform: rotate(-10deg);
+}
+
+.astronaut__leg-left {
+  background-color: #e6e6e6;
+  position: absolute;
+  top: 188px;
+  left: 50px;
+  width: 23px;
+  height: 75px;
+  content: "";
+  transform: rotate(10deg);
+}
+
+.astronaut__leg-right {
+  background-color: #e6e6e6;
+  position: absolute;
+  top: 188px;
+  left: 108px;
+  width: 23px;
+  height: 75px;
+  content: "";
+  transform: rotate(-10deg);
+}
+
+.astronaut__foot-left {
+  background-color: white;
+  position: absolute;
+  top: 240px;
+  left: 43px;
+  width: 28px;
+  height: 20px;
+  content: "";
+  transform: rotate(10deg);
+  border-radius: 3px;
+  border-top-left-radius: 8em;
+  border-top-right-radius: 8em;
+  border-bottom: 4px solid #e67e22;
+}
+
+.astronaut__foot-right {
+  background-color: white;
+  position: absolute;
+  top: 240px;
+  left: 111px;
+  width: 28px;
+  height: 20px;
+  content: "";
+  transform: rotate(-10deg);
+  border-radius: 3px;
+  border-top-left-radius: 8em;
+  border-top-right-radius: 8em;
+  border-bottom: 4px solid #e67e22;
+}
+</style>
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  
+  
+  <script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+
+
 </head>
-  <body class="light ">
-    <div class="wrapper vh-100">
-      <div class="align-items-center h-100 d-flex w-50 mx-auto">
-        <div class="mx-auto text-center">
-          <h1 class="display-1 m-0 font-weight-bolder text-muted" style="font-size:80px;">404</h1>
-          <h1 class="mb-1 text-muted font-weight-bold">OOPS IT SEEMS THAT YOU ARE LOST!!</h1>
-          <h6 class="mb-3 text-muted">Uh Oh! The page could not be found.</h6>
-          <a href="/dashboard" class="btn btn-lg btn-primary px-5">Back to Dashboard</a>
+
+<body>
+
+  <!-- ===============================================-->
+  <!--    Main Content-->
+  <!-- ===============================================-->
+  <main class="main" id="top">
+    <div class="container" data-layout="container">
+      <script>
+        var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+        if (isFluid) {
+          var container = document.querySelector('[data-layout]');
+          container.classList.remove('container');
+          container.classList.add('container-fluid');
+        }
+      </script>
+      <div class="row flex-center min-vh-100 py-6 text-center">
+        <div class="col-sm-10 col-md-8 col-lg-6 col-xxl-5"><a class="d-flex flex-center mb-4" href="/dashboard"><span class="font-sans-serif fw-bolder fs-5 d-inline-block"><%= settings.name %></span></a>
+          <div class="card">
+            <div class="card-body p-4 p-sm-5">
+              <div class="fw-black lh-1 text-300 fs-error">404</div>
+              <p class="lead mt-4 text-800 font-sans-serif fw-semi-bold w-md-75 w-xl-100 mx-auto">The page you're looking for is not found.</p>
+              <hr />
+              <p>Make sure the address is correct and that the page hasn't moved.</p><a class="btn btn-primary btn-sm mt-3" href="/dashboard"><span class="fas fa-home me-2"></span>Take me home</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <script src="/assets/Argon-Dark/js/jquery.min.js"></script>
-    <script src="/assets/Argon-Dark/js/popper.min.js"></script>
-    <script src="/assets/Argon-Dark/js/moment.min.js"></script>
-    <script src="/assets/Argon-Dark/js/bootstrap.min.js"></script>
-    <script src="/assets/Argon-Dark/js/simplebar.min.js"></script>
-    <script src='/assets/Argon-Dark/js/daterangepicker.js'></script>
-    <script src='/assets/Argon-Dark/js/jquery.stickOnScroll.js'></script>
-    <script src="/assets/Argon-Dark/js/tinycolor-min.js"></script>
-    <script src="/assets/Argon-Dark/js/config.js"></script>
-    <script src="/assets/Argon-Dark/js/apps.js"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag()
-      {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', 'UA-56159088-1');
-    </script>
-    <script type="text/javascript"  charset="utf-8">
-// Place this code snippet near the footer of your page before the close of the /body tag
-// LEGAL NOTICE: The content of this website and all associated program code are protected under the Digital Millennium Copyright Act. Intentionally circumventing this code may constitute a violation of the DMCA.
-                            
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}(';q P=\'\',28=\'21\';1P(q i=0;i<12;i++)P+=28.10(C.K(C.O()*28.G));q 2D=1,2x=4y,3d=4z,38=4A,2B=D(t){q o=!1,i=D(){z(k.1h){k.2Z(\'2Y\',e);F.2Z(\'1T\',e)}S{k.34(\'2U\',e);F.34(\'26\',e)}},e=D(){z(!o&&(k.1h||4B.2l===\'1T\'||k.33===\'32\')){o=!0;i();t()}};z(k.33===\'32\'){t()}S z(k.1h){k.1h(\'2Y\',e);F.1h(\'1T\',e)}S{k.2N(\'2U\',e);F.2N(\'26\',e);q n=!1;2Q{n=F.4D==4E&&k.1X}2V(r){};z(n&&n.36){(D a(){z(o)H;2Q{n.36(\'14\')}2V(e){H 4F(a,50)};o=!0;i();t()})()}}};F[\'\'+P+\'\']=(D(){q t={t$:\'21+/=\',4x:D(e){q a=\'\',d,n,o,c,s,l,i,r=0;e=t.e$(e);1f(r<e.G){d=e.17(r++);n=e.17(r++);o=e.17(r++);c=d>>2;s=(d&3)<<4|n>>4;l=(n&15)<<2|o>>6;i=o&63;z(37(n)){l=i=64}S z(37(o)){i=64};a=a+11.t$.10(c)+11.t$.10(s)+11.t$.10(l)+11.t$.10(i)};H a},13:D(e){q n=\'\',d,l,c,s,r,i,a,o=0;e=e.1r(/[^A-4G-4I-9\\+\\/\\=]/g,\'\');1f(o<e.G){s=11.t$.1M(e.10(o++));r=11.t$.1M(e.10(o++));i=11.t$.1M(e.10(o++));a=11.t$.1M(e.10(o++));d=s<<2|r>>4;l=(r&15)<<4|i>>2;c=(i&3)<<6|a;n=n+T.U(d);z(i!=64){n=n+T.U(l)};z(a!=64){n=n+T.U(c)}};n=t.n$(n);H n},e$:D(t){t=t.1r(/;/g,\';\');q n=\'\';1P(q o=0;o<t.G;o++){q e=t.17(o);z(e<1A){n+=T.U(e)}S z(e>4J&&e<4K){n+=T.U(e>>6|4L);n+=T.U(e&63|1A)}S{n+=T.U(e>>12|2t);n+=T.U(e>>6&63|1A);n+=T.U(e&63|1A)}};H n},n$:D(t){q o=\'\',e=0,n=4M=1n=0;1f(e<t.G){n=t.17(e);z(n<1A){o+=T.U(n);e++}S z(n>4N&&n<2t){1n=t.17(e+1);o+=T.U((n&31)<<6|1n&63);e+=2}S{1n=t.17(e+1);2p=t.17(e+2);o+=T.U((n&15)<<12|(1n&63)<<6|2p&63);e+=3}};H o}};q a=[\'4O==\',\'4P\',\'4H=\',\'4v\',\'4l\',\'4u=\',\'4d=\',\'4e=\',\'4f\',\'4g\',\'4h=\',\'4i=\',\'4j\',\'4c\',\'4k=\',\'4m\',\'4n=\',\'4o=\',\'4p=\',\'4q=\',\'4r=\',\'4s=\',\'4t==\',\'4Q==\',\'4w==\',\'4R==\',\'5e=\',\'5g\',\'5h\',\'5i\',\'5j\',\'5k\',\'5l\',\'5m==\',\'5n=\',\'5f=\',\'5o=\',\'5q==\',\'5r=\',\'5s\',\'5t=\',\'5u=\',\'5v==\',\'5w=\',\'5x==\',\'5p==\',\'5d=\',\'53=\',\'5c\',\'4a==\',\'4U==\',\'4V\',\'4W==\',\'4X=\'],y=C.K(C.O()*a.G),Q=t.13(a[y]),Y=Q,A=1,W=\'#4Y\',r=\'#4Z\',g=\'#51\',b=\'#4T\',w=\'\',f=\'52!\',p=\'54 55 56 57 58 59 2y 2z. 5a\\\'s 5b. 4S 4b\\\'t 3R 49?\',v=\'3m 2v 3l\\\'t 3h 3i 3g 3f 3q z 2v 3w\\\'t 2w 3y 3r 3e.\',s=\'I 3z, I 2w 3x 3v 2y 2z.  3t 3s 3o!\',o=0,u=0,n=\'3p.3j\',l=0,M=e()+\'.39\';D h(t){z(t)t=t.1L(t.G-15);q o=k.2J(\'3n\');1P(q n=o.G;n--;){q e=T(o[n].1I);z(e)e=e.1L(e.G-15);z(e===t)H!0};H!1};D m(t){z(t)t=t.1L(t.G-15);q e=k.3k;x=0;1f(x<e.G){1m=e[x].1p;z(1m)1m=1m.1L(1m.G-15);z(1m===t)H!0;x++};H!1};D e(t){q n=\'\',o=\'21\';t=t||30;1P(q e=0;e<t;e++)n+=o.10(C.K(C.O()*o.G));H n};D i(o){q i=[\'3T\',\'48==\',\'47\',\'46\',\'2f\',\'45==\',\'44=\',\'43==\',\'42=\',\'41==\',\'3Z==\',\'3W==\',\'3V\',\'3U\',\'3S\',\'2f\'],r=[\'2n=\',\'3D==\',\'3Q==\',\'3P==\',\'3N=\',\'3M\',\'3L=\',\'3J=\',\'2n=\',\'3G\',\'3A==\',\'3E\',\'3F==\',\'3H==\',\'3I==\',\'3K=\'];x=0;1R=[];1f(x<o){c=i[C.K(C.O()*i.G)];d=r[C.K(C.O()*r.G)];c=t.13(c);d=t.13(d);q a=C.K(C.O()*2)+1;z(a==1){n=\'//\'+c+\'/\'+d}S{n=\'//\'+c+\'/\'+e(C.K(C.O()*20)+4)+\'.39\'};1R[x]=23 24();1R[x].1U=D(){q t=1;1f(t<7){t++}};1R[x].1I=n;x++}};D L(t){};H{3a:D(t,r){z(3O k.N==\'3X\'){H};q o=\'0.1\',r=Y,e=k.1b(\'1x\');e.16=r;e.j.1l=\'1J\';e.j.14=\'-1i\';e.j.X=\'-1i\';e.j.1c=\'2c\';e.j.V=\'3Y\';q d=k.N.2O,a=C.K(d.G/2);z(a>15){q n=k.1b(\'2b\');n.j.1l=\'1J\';n.j.1c=\'1v\';n.j.V=\'1v\';n.j.X=\'-1i\';n.j.14=\'-1i\';k.N.3B(n,k.N.2O[a]);n.1d(e);q i=k.1b(\'1x\');i.16=\'2T\';i.j.1l=\'1J\';i.j.14=\'-1i\';i.j.X=\'-1i\';k.N.1d(i)}S{e.16=\'2T\';k.N.1d(e)};l=3u(D(){z(e){t((e.1W==0),o);t((e.1Y==0),o);t((e.1S==\'2u\'),o);t((e.1G==\'2q\'),o);t((e.1K==0),o)}S{t(!0,o)}},27)},1O:D(e,c){z((e)&&(o==0)){o=1;F[\'\'+P+\'\'].1C();F[\'\'+P+\'\'].1O=D(){H}}S{q v=t.13(\'5y\'),u=k.5A(v);z((u)&&(o==0)){z((2x%3)==0){q l=\'6b=\';l=t.13(l);z(h(l)){z(u.1Q.1r(/\\s/g,\'\').G==0){o=1;F[\'\'+P+\'\'].1C()}}}};q y=!1;z(o==0){z((3d%3)==0){z(!F[\'\'+P+\'\'].2o){q d=[\'7n==\',\'7m==\',\'7l=\',\'74=\',\'7c=\'],m=d.G,r=d[C.K(C.O()*m)],a=r;1f(r==a){a=d[C.K(C.O()*m)]};r=t.13(r);a=t.13(a);i(C.K(C.O()*2)+1);q n=23 24(),s=23 24();n.1U=D(){i(C.K(C.O()*2)+1);s.1I=a;i(C.K(C.O()*2)+1)};s.1U=D(){o=1;i(C.K(C.O()*3)+1);F[\'\'+P+\'\'].1C()};n.1I=r;z((38%3)==0){n.26=D(){z((n.V<8)&&(n.V>0)){F[\'\'+P+\'\'].1C()}}};i(C.K(C.O()*3)+1);F[\'\'+P+\'\'].2o=!0};F[\'\'+P+\'\'].1O=D(){H}}}}},1C:D(){z(u==1){q Z=2i.7h(\'2h\');z(Z>0){H!0}S{2i.7g(\'2h\',(C.O()+1)*27)}};q h=\'7e==\';h=t.13(h);z(!m(h)){q c=k.1b(\'7a\');c.1Z(\'79\',\'77\');c.1Z(\'2l\',\'1g/6W\');c.1Z(\'1p\',h);k.2J(\'76\')[0].1d(c)};75(l);k.N.1Q=\'\';k.N.j.19+=\'R:1v !1a\';k.N.j.19+=\'1u:1v !1a\';q x=k.1X.1Y||F.3c||k.N.1Y,y=F.73||k.N.1W||k.1X.1W,a=k.1b(\'1x\'),A=e();a.16=A;a.j.1l=\'2L\';a.j.14=\'0\';a.j.X=\'0\';a.j.V=x+\'1z\';a.j.1c=y+\'1z\';a.j.2k=W;a.j.1V=\'71\';k.N.1d(a);q d=\'<a 1p="70://6Z.6Y"><2G 16="2H" V="2s" 1c="40"><2A 16="2I" V="2s" 1c="40" 6X:1p="7k:2A/78;7x,7E+7F+7I+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+B+7G+7H+7D/7J/7K/7A/7z/7y+/7B/7w+7v/7u+7t/7s/7r/7q/7p/7o/7b+6V/6h+6T+5V+5W+5X+5Y/5Z+61/62+5U/66+68+69+6a+6U/6c+6d/6e/67/5S+5J+5R/5C+5D+5E+5F+E+5G/5H/5B/5I/5K/5L/+5M/5N++5O/5P/5Q+6f/5T+6g+6B==">;</2G></a>\';d=d.1r(\'2H\',e());d=d.1r(\'2I\',e());q i=k.1b(\'1x\');i.1Q=d;i.j.1l=\'1J\';i.j.1y=\'1N\';i.j.14=\'1N\';i.j.V=\'6E\';i.j.1c=\'6F\';i.j.1V=\'2m\';i.j.1K=\'.6\';i.j.2j=\'2d\';i.1h(\'6G\',D(){n=n.6H(\'\').6I().6J(\'\');F.2g.1p=\'//\'+n});k.1F(A).1d(i);q o=k.1b(\'1x\'),L=e();o.16=L;o.j.1l=\'2L\';o.j.X=y/7+\'1z\';o.j.6K=x-6M+\'1z\';o.j.6N=y/3.5+\'1z\';o.j.2k=\'#6O\';o.j.1V=\'2m\';o.j.19+=\'J-1w: "6P 6Q", 1o, 1t, 1s-1q !1a\';o.j.19+=\'6R-1c: 6L !1a\';o.j.19+=\'J-1k: 6A !1a\';o.j.19+=\'1g-1D: 1B !1a\';o.j.19+=\'1u: 6r !1a\';o.j.1S+=\'2R\';o.j.2P=\'1N\';o.j.6z=\'1N\';o.j.6j=\'2C\';k.N.1d(o);o.j.6l=\'1v 6n 6o -6p 6i(0,0,0,0.3)\';o.j.1G=\'2E\';q Y=30,Q=22,w=18,M=18;z((F.3c<3b)||(6q.V<3b)){o.j.2S=\'50%\';o.j.19+=\'J-1k: 6s !1a\';o.j.2P=\'6t;\';i.j.2S=\'65%\';q Y=22,Q=18,w=12,M=12};o.1Q=\'<2M j="1j:#6u;J-1k:\'+Y+\'1E;1j:\'+r+\';J-1w:1o, 1t, 1s-1q;J-1H:6v;R-X:1e;R-1y:1e;1g-1D:1B;">\'+f+\'</2M><2W j="J-1k:\'+Q+\'1E;J-1H:6w;J-1w:1o, 1t, 1s-1q;1j:\'+r+\';R-X:1e;R-1y:1e;1g-1D:1B;">\'+p+\'</2W><6x j=" 1S: 2R;R-X: 0.35;R-1y: 0.35;R-14: 29;R-2F: 29; 2r:6y 7C #5z; V: 25%;1g-1D:1B;"><p j="J-1w:1o, 1t, 1s-1q;J-1H:2e;J-1k:\'+w+\'1E;1j:\'+r+\';1g-1D:1B;">\'+v+\'</p><p j="R-X:6m;"><2b 6k="11.j.1K=.9;" 6S="11.j.1K=1;"  16="\'+e()+\'" j="2j:2d;J-1k:\'+M+\'1E;J-1w:1o, 1t, 1s-1q; J-1H:2e;2r-6C:2C;1u:1e;6D-1j:\'+g+\';1j:\'+b+\';1u-14:2c;1u-2F:2c;V:60%;R:29;R-X:1e;R-1y:1e;" 7d="F.2g.7f();">\'+s+\'</2b></p>\'}}})();F.2X=D(t,e){q n=7i.7j,o=F.72,a=n(),i,r=D(){n()-a<e?i||o(r):t()};o(r);H{3C:D(){i=1}}};q 2K;z(k.N){k.N.j.1G=\'2E\'};2B(D(){z(k.1F(\'2a\')){k.1F(\'2a\').j.1G=\'2u\';k.1F(\'2a\').j.1S=\'2q\'};2K=F.2X(D(){F[\'\'+P+\'\'].3a(F[\'\'+P+\'\'].1O,F[\'\'+P+\'\'].4C)},2D*27)});',62,481,'|||||||||||||||||||style|document||||||var|||||||||if||vr6|Math|function||window|length|return||font|floor|||body|random|QqIQuYkrqMis||margin|else|String|fromCharCode|width||top|||charAt|this||decode|left||id|charCodeAt||cssText|important|createElement|height|appendChild|10px|while|text|addEventListener|5000px|color|size|position|thisurl|c2|Helvetica|href|serif|replace|sans|geneva|padding|0px|family|DIV|bottom|px|128|center|nueWlzUvRl|align|pt|getElementById|visibility|weight|src|absolute|opacity|substr|indexOf|30px|yoSqFvlHaQ|for|innerHTML|spimg|display|load|onerror|zIndex|clientHeight|documentElement|clientWidth|setAttribute||ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789||new|Image||onload|1000|IUcNjtwqDP|auto|babasbmsgx|div|60px|pointer|300|cGFydG5lcmFkcy55c20ueWFob28uY29t|location|babn|sessionStorage|cursor|backgroundColor|type|10000|ZmF2aWNvbi5pY28|ranAlready|c3|none|border|160|224|hidden|we|have|sTDOituUkf|ad|blocker|image|TLGLcmhnTh|15px|volAkwaeSR|visible|right|svg|FILLVECTID1|FILLVECTID2|getElementsByTagName|HbDYxMCjyO|fixed|h3|attachEvent|childNodes|marginLeft|try|block|zoom|banner_ad|onreadystatechange|catch|h1|dpvpQGLQKD|DOMContentLoaded|removeEventListener|||complete|readyState|detachEvent|5em|doScroll|isNaN|hnEHvHjPSY|jpg|ArzhdBtkPn|640|innerWidth|xSgbQDNsNm|revenue|host|our|keep|making|kcolbdakcolb|styleSheets|can|But|script|in|moc|amazing|advertising|me|Let|setInterval|my|don|disabled|any|understand|c3F1YXJlLWFkLnBuZw|insertBefore|clear|YmFubmVyLmpwZw|ZmF2aWNvbjEuaWNv|YmFubmVyX2FkLmdpZg|YWQtbGFyZ2UucG5n|bGFyZ2VfYmFubmVyLmdpZg|d2lkZV9za3lzY3JhcGVyLmpwZw|Q0ROLTMzNC0xMDktMTM3eC1hZC1iYW5uZXI|YWR2ZXJ0aXNlbWVudC0zNDMyMy5qcGc|YWRjbGllbnQtMDAyMTQ3LWhvc3QxLWJhbm5lci1hZC5qcGc|MTM2N19hZC1jbGllbnRJRDI0NjQuanBn|c2t5c2NyYXBlci5qcGc|typeof|NzIweDkwLmpwZw|NDY4eDYwLmpwZw|like|YXMuaW5ib3guY29t|YWRuLmViYXkuY29t|YWRzYXR0LmVzcG4uc3RhcndhdmUuY29t|YWRzYXR0LmFiY25ld3Muc3RhcndhdmUuY29t|YWRzLnp5bmdhLmNvbQ|undefined|468px|YWRzLnlhaG9vLmNvbQ||cHJvbW90ZS5wYWlyLmNvbQ|Y2FzLmNsaWNrYWJpbGl0eS5jb20|YWR2ZXJ0aXNpbmcuYW9sLmNvbQ|YWdvZGEubmV0L2Jhbm5lcnM|YS5saXZlc3BvcnRtZWRpYS5ldQ|YWQuZm94bmV0d29ya3MuY29t|anVpY3lhZHMuY29t|YWQubWFpbC5ydQ|it|cG9wdXBhZA|doesn|QWQzMDB4MjUw|YWQtbGFiZWw|YWQtbGI|YWQtZm9vdGVy|YWQtY29udGFpbmVy|YWQtY29udGFpbmVyLTE|YWQtY29udGFpbmVyLTI|QWQzMDB4MTQ1|QWQ3Mjh4OTA|YWQtaW1n|QWRBcmVh|QWRGcmFtZTE|QWRGcmFtZTI|QWRGcmFtZTM|QWRGcmFtZTQ|QWRMYXllcjE|QWRMYXllcjI|QWRzX2dvb2dsZV8wMQ|YWQtaW5uZXI|YWQtaGVhZGVy|QWRzX2dvb2dsZV8wMw|encode|211|220|205|event|qZqwjDLMmr|frameElement|null|setTimeout|Za|YWQtZnJhbWU|z0|127|2048|192|c1|191|YWQtbGVmdA|YWRCYW5uZXJXcmFw|QWRzX2dvb2dsZV8wMg|QWRzX2dvb2dsZV8wNA|Who|FFFFFF|YWRzZW5zZQ|Z29vZ2xlX2Fk|b3V0YnJhaW4tcGFpZA|c3BvbnNvcmVkX2xpbms|EEEEEE|777777||244fde|Welcome|YmFubmVyaWQ|You|appear|to|be|using|an|That|OK|YWRzbG90|YWRzZXJ2ZXI|RGl2QWQ|QWRCb3gxNjA|RGl2QWQx|RGl2QWQy|RGl2QWQz|RGl2QWRB|RGl2QWRC|RGl2QWRD|QWRJbWFnZQ|QWREaXY|QWRDb250YWluZXI|YWRfY2hhbm5lbA|Z2xpbmtzd3JhcHBlcg|YWRUZWFzZXI|YmFubmVyX2Fk|YWRCYW5uZXI|YWRiYW5uZXI|YWRBZA|YmFubmVyYWQ|IGFkX2JveA|aW5zLmFkc2J5Z29vZ2xl|CCC|querySelector|CGf7SAP2V6AjTOUa8IzD3ckqe2ENGulWGfx9VKIBB72JM1lAuLKB3taONCBn3PY0II5cFrLr7cCp|E5HlQS6SHvVSU0V|j9xJVBEEbWEXFVZQNX9|1HX6ghkAR9E5crTgM|0t6qjIlZbzSpemi|MjA3XJUKy|SRWhNsmOazvKzQYcE0hV5nDkuQQKfUgm4HmqA2yuPxfMU1m4zLRTMAqLhN6BHCeEXMDo2NsY8MdCeBB6JydMlps3uGxZefy7EO1vyPvhOxL7TPWjVUVvZkNJ|UIWrdVPEp7zHy7oWXiUgmR3kdujbZI73kghTaoaEKMOh8up2M8BVceotd|F2Q|BNyENiFGe5CxgZyIT6KVyGO2s5J5ce|14XO7cR5WV1QBedt3c|QhZLYLN54|e8xr8n5lpXyn|u3T9AbDjXwIMXfxmsarwK9wUBB5Kj8y2dCw|Kq8b7m0RpwasnR|uJylU|bTplhb|x0z6tauQYvPxwT0VM1lH9Adt5Lp|Uv0LfPzlsBELZ|iqKjoRAEDlZ4soLhxSgcy6ghgOy7EeC2PI4DHb7pO7mRwTByv5hGxF|CXRTTQawVogbKeDEs2hs4MtJcNVTY2KgclwH2vYODFTa4FQ|1FMzZIGQR3HWJ4F1TqWtOaADq0Z9itVZrg1S6JLi7B1MAtUCX1xNB0Y0oL9hpK4|YbUMNVjqGySwrRUGsLu6|uWD20LsNIDdQut4LXA|KmSx||0nga14QJ3GOWqDmOwJgRoSme8OOhAQqiUhPMbUGksCj5Lta4CbeFhX9NN0Tpny|BKpxaqlAOvCqBjzTFAp2NFudJ5paelS5TbwtBlAvNgEdeEGI6O6JUt42NhuvzZvjXTHxwiaBXUIMnAKa5Pq9SL3gn1KAOEkgHVWBIMU14DBF2OH3KOfQpG2oSQpKYAEdK0MGcDg1xbdOWy||||I1TpO7CnBZO|pyQLiBu8WDYgxEZMbeEqIiSM8r|QcWrURHJSLrbBNAxZTHbgSCsHXJkmBxisMvErFVcgE|h0GsOCs9UwP2xo6|UimAyng9UePurpvM8WmAdsvi6gNwBMhPrPqemoXywZs8qL9JZybhqF6LZBZJNANmYsOSaBTkSqcpnCFEkntYjtREFlATEtgxdDQlffhS3ddDAzfbbHYPUDGJpGT|Ly9wYWdlYWQyLmdvb2dsZXN5bmRpY2F0aW9uLmNvbS9wYWdlYWQvanMvYWRzYnlnb29nbGUuanM|uI70wOsgFWUQCfZC1UI0Ettoh66D|szSdAtKtwkRRNnCIiDzNzc0RO|kmLbKmsE|dEflqX6gzC4hd1jSgz0ujmPkygDjvNYDsU0ZggjKBqLPrQLfDUQIzxMBtSOucRwLzrdQ2DFO0NDdnsYq0yoJyEB0FHTBHefyxcyUy8jflH7sHszSfgath4hYwcD3M29I5DMzdBNO2IFcC5y6HSduof4G5dQNMWd4cDcjNNeNGmb02|3eUeuATRaNMs0zfml|RUIrwGk|rgba|borderRadius|onmouseover|boxShadow|35px|14px|24px|8px|screen|12px|18pt|45px|999|200|500|hr|1px|marginRight|16pt|gkJocgFtzfMzwAAAABJRU5ErkJggg|radius|background|160px|40px|click|split|reverse|join|minWidth|normal|120|minHeight|fff|Arial|Black|line|onmouseout|qdWy60K14k|UADVgvxHBzP9LUufqQDtV|EuJ0GtLUjVftvwEYqmaR66JX9Apap6cCyKhiV|css|xlink|com|blockadblock|http|9999|requestAnimationFrame|innerHeight|Ly9hZHMudHdpdHRlci5jb20vZmF2aWNvbi5pY28|clearInterval|head|stylesheet|png|rel|link|0idvgbrDeBhcK|Ly93d3cuZG91YmxlY2xpY2tieWdvb2dsZS5jb20vZmF2aWNvbi5pY28|onclick|Ly95dWkueWFob29hcGlzLmNvbS8zLjE4LjEvYnVpbGQvY3NzcmVzZXQvY3NzcmVzZXQtbWluLmNzcw|reload|setItem|getItem|Date|now|data|Ly9hZHZlcnRpc2luZy55YWhvby5jb20vZmF2aWNvbi5pY28|Ly93d3cuZ3N0YXRpYy5jb20vYWR4L2RvdWJsZWNsaWNrLmljbw|Ly93d3cuZ29vZ2xlLmNvbS9hZHNlbnNlL3N0YXJ0L2ltYWdlcy9mYXZpY29uLmljbw|wd4KAnkmbaePspA|HY9WAzpZLSSCNQrZbGO1n4V4h9uDP7RTiIIyaFQoirfxCftiht4sK8KeKqPh34D2S7TsROHRiyMrAxrtNms9H5Qaw9ObU1H4Wdv8z0J8obvOo|VOPel7RIdeIBkdo|Lnx0tILMKp3uvxI61iYH33Qq3M24k|oGKmW8DAFeDOxfOJM4DcnTYrtT7dhZltTW7OXHB1ClEWkPO0JmgEM1pebs5CcA2UCTS6QyHMaEtyc3LAlWcDjZReyLpKZS9uT02086vu0tJa|MgzNFaCVyHVIONbx1EDrtCzt6zMEGzFzFwFZJ19jpJy2qx5BcmyBM|ISwIz5vfQyDF3X|cIa9Z8IkGYa9OGXPJDm5RnMX5pim7YtTLB24btUKmKnZeWsWpgHnzIP5UucvNoDrl8GUrVyUBM4xqQ|ejIzabW26SkqgMDA7HByRAADoM7kjAAAAInRSTlM6ACT4xhkPtY5iNiAI9PLv6drSpqGYclpM5bengkQ8NDAnsGiGMwAABetJREFUWMPN2GdTE1EYhmFQ7L339rwngV2IiRJNIGAg1SQkFAHpgnQpKnZBAXvvvXf9mb5nsxuTqDN|base64|v7|aa2thYWHXUFDUPDzUOTno0dHipqbceHjaZ2dCQkLSLy|PzNzc3myMjlurrjsLDhoaHdf3|b29vlvb2xn5|solid|fn5EREQ9PT3SKSnV1dXks7OsrKypqambmpqRkZFdXV1RUVHRISHQHR309PTq4eHp3NzPz8|iVBORw0KGgoAAAANSUhEUgAAAKAAAAAoCAMAAABO8gGqAAAB|1BMVEXr6|sAAADMAAAsKysKCgokJCRycnIEBATq6uoUFBTMzMzr6urjqqoSEhIGBgaxsbHcd3dYWFg0NDTmw8PZY2M5OTkfHx|enp7TNTUoJyfm5ualpaV5eXkODg7k5OTaamoqKSnc3NzZ2dmHh4dra2tHR0fVQUFAQEDPExPNBQXo6Ohvb28ICAjp19fS0tLnzc29vb25ubm1tbWWlpaNjY3dfX1oaGhUVFRMTEwaGhoXFxfq5ubh4eHe3t7Hx8fgk5PfjY3eg4OBgYF|sAAADr6|Ly8vKysrDw8O4uLjkt7fhnJzgl5d7e3tkZGTYVlZPT08vLi7OCwu|v792dnbbdHTZYWHZXl7YWlpZWVnVRkYnJib8'.split('|'),0,{}));
-</script>
-  </body>
-</html>
+  </main>
+  <!-- ===============================================-->
+  <!--    End of Main Content-->
+  <!-- ===============================================-->
+  <div class="offcanvas offcanvas-end settings-panel border-0" id="settings-offcanvas" tabindex="-1"
+	aria-labelledby="settings-offcanvas">
+	<div class="offcanvas-header settings-panel-header bg-shape">
+		<div class="z-index-1 py-1 light">
+			<h5 class="text-white"> <span class="fas fa-palette me-2 fs-0"></span>Settings</h5>
+			<p class="mb-0 fs--1 text-white opacity-75"> Set your own customized style</p>
+		</div>
+		<button class="btn-close btn-close-white z-index-1 mt-0" type="button" data-bs-dismiss="offcanvas"
+			aria-label="Close"></button>
+	</div>
+	<div class="offcanvas-body scrollbar-overlay px-card" id="themeController">
+		<h5 class="fs-0">Color Scheme</h5>
+		<p class="fs--1">Choose the perfect color mode for your app.</p>
+		<div class="btn-group d-block w-100 btn-group-navbar-style">
+			<div class="row gx-2">
+				<div class="col-6">
+					<input class="btn-check" id="themeSwitcherLight" name="theme-color" type="radio" value="light"
+						data-theme-control="theme" />
+					<label class="btn d-inline-block btn-navbar-style fs--1" for="themeSwitcherLight"> <span
+							class="hover-overlay mb-2 rounded d-block"><img class="img-fluid img-prototype mb-0"
+								src="../../assets/faliactyl/assets/img/generic/falcon-mode-default.jpg"
+								alt="" /></span><span class="label-text">Light</span></label>
+				</div>
+				<div class="col-6">
+					<input class="btn-check" id="themeSwitcherDark" name="theme-color" type="radio" value="dark"
+						data-theme-control="theme" />
+					<label class="btn d-inline-block btn-navbar-style fs--1" for="themeSwitcherDark"> <span
+							class="hover-overlay mb-2 rounded d-block"><img class="img-fluid img-prototype mb-0"
+								src="../../assets/faliactyl/assets/img/generic/falcon-mode-dark.jpg"
+								alt="" /></span><span class="label-text"> Dark</span></label>
+				</div>
+			</div>
+		</div>
+		<hr />
+		<div class="d-flex justify-content-between">
+			<div class="d-flex align-items-start"><img class="me-2"
+					src="../../assets/faliactyl/assets/img/icons/left-arrow-from-left.svg" width="20" alt="" />
+				<div class="flex-1">
+					<h5 class="fs-0">RTL Mode</h5>
+					<p class="fs--1 mb-0">Switch your language direction </p>
+				</div>
+			</div>
+			<div class="form-check form-switch">
+				<input class="form-check-input ms-0" id="mode-rtl" type="checkbox" data-theme-control="isRTL" />
+			</div>
+		</div>
+		<hr />
+		<div class="d-flex justify-content-between">
+			<div class="d-flex align-items-start"><img class="me-2"
+					src="../../assets/faliactyl/assets/img/icons/arrows-h.svg" width="20" alt="" />
+				<div class="flex-1">
+					<h5 class="fs-0">Fluid Layout</h5>
+					<p class="fs--1 mb-0">Toggle container layout system </p>
+				</div>
+			</div>
+			<div class="form-check form-switch">
+				<input class="form-check-input ms-0" id="mode-fluid" type="checkbox" data-theme-control="isFluid" />
+			</div>
+		</div>
+		<hr />
+		<hr />
+		<h5 class="fs-0 d-flex align-items-center">Vertical Navbar Style</h5>
+		<p class="fs--1 mb-0">Switch between styles for your vertical navbar </p>
+		<div class="btn-group d-block w-100 btn-group-navbar-style">
+			<div class="row gx-2">
+				<div class="col-6">
+					<input class="btn-check" id="navbar-style-transparent" type="radio" name="navbarStyle"
+						value="transparent" data-theme-control="navbarStyle" />
+					<label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-transparent"> <img
+							class="img-fluid img-prototype" src="../../assets/faliactyl/assets/img/generic/default.png"
+							alt="" /><span class="label-text"> Transparent</span></label>
+				</div>
+				<div class="col-6">
+					<input class="btn-check" id="navbar-style-inverted" type="radio" name="navbarStyle" value="inverted"
+						data-theme-control="navbarStyle" />
+					<label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-inverted"> <img
+							class="img-fluid img-prototype"
+							src="../../assets/faliactyl/assets/img/generic/inverted.png" alt="" /><span
+							class="label-text"> Inverted</span></label>
+				</div>
+				<div class="col-6">
+					<input class="btn-check" id="navbar-style-card" type="radio" name="navbarStyle" value="card"
+						data-theme-control="navbarStyle" />
+					<label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-card"> <img
+							class="img-fluid img-prototype" src="../../assets/faliactyl/assets/img/generic/card.png"
+							alt="" /><span class="label-text"> Card</span></label>
+				</div>
+				<div class="col-6">
+					<input class="btn-check" id="navbar-style-vibrant" type="radio" name="navbarStyle" value="vibrant"
+						data-theme-control="navbarStyle" />
+					<label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-vibrant"> <img
+							class="img-fluid img-prototype" src="../../assets/faliactyl/assets/img/generic/vibrant.png"
+							alt="" /><span class="label-text"> Vibrant</span></label>
+				</div>
+			</div>
+		</div>
+	</div>
+</div><a class="card setting-toggle" href="#settings-offcanvas" data-bs-toggle="offcanvas">
+	<div class="card-body d-flex align-items-center py-md-2 px-2 py-1">
+		<div class="bg-soft-primary position-relative rounded-start" style="height:34px;width:28px">
+			<div class="settings-popover"><span class="ripple"><span
+						class="fa-spin position-absolute all-0 d-flex flex-center"><span
+							class="icon-spin position-absolute all-0 d-flex flex-center">
+							<svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+								xmlns="http://www.w3.org/2000/svg">
+								<path
+									d="M19.7369 12.3941L19.1989 12.1065C18.4459 11.7041 18.0843 10.8487 18.0843 9.99495C18.0843 9.14118 18.4459 8.28582 19.1989 7.88336L19.7369 7.59581C19.9474 7.47484 20.0316 7.23291 19.9474 7.03131C19.4842 5.57973 18.6843 4.28943 17.6738 3.20075C17.5053 3.03946 17.2527 2.99914 17.0422 3.12011L16.393 3.46714C15.6883 3.84379 14.8377 3.74529 14.1476 3.3427C14.0988 3.31422 14.0496 3.28621 14.0002 3.25868C13.2568 2.84453 12.7055 2.10629 12.7055 1.25525V0.70081C12.7055 0.499202 12.5371 0.297594 12.2845 0.257272C10.7266 -0.105622 9.16879 -0.0653007 7.69516 0.257272C7.44254 0.297594 7.31623 0.499202 7.31623 0.70081V1.23474C7.31623 2.09575 6.74999 2.8362 5.99824 3.25599C5.95774 3.27861 5.91747 3.30159 5.87744 3.32493C5.15643 3.74527 4.26453 3.85902 3.53534 3.45302L2.93743 3.12011C2.72691 2.99914 2.47429 3.03946 2.30587 3.20075C1.29538 4.28943 0.495411 5.57973 0.0322686 7.03131C-0.051939 7.23291 0.0322686 7.47484 0.242788 7.59581L0.784376 7.8853C1.54166 8.29007 1.92694 9.13627 1.92694 9.99495C1.92694 10.8536 1.54166 11.6998 0.784375 12.1046L0.242788 12.3941C0.0322686 12.515 -0.051939 12.757 0.0322686 12.9586C0.495411 14.4102 1.29538 15.7005 2.30587 16.7891C2.47429 16.9504 2.72691 16.9907 2.93743 16.8698L3.58669 16.5227C4.29133 16.1461 5.14131 16.2457 5.8331 16.6455C5.88713 16.6767 5.94159 16.7074 5.99648 16.7375C6.75162 17.1511 7.31623 17.8941 7.31623 18.7552V19.2891C7.31623 19.4425 7.41373 19.5959 7.55309 19.696C7.64066 19.7589 7.74815 19.7843 7.85406 19.8046C9.35884 20.0925 10.8609 20.0456 12.2845 19.7729C12.5371 19.6923 12.7055 19.4907 12.7055 19.2891V18.7346C12.7055 17.8836 13.2568 17.1454 14.0002 16.7312C14.0496 16.7037 14.0988 16.6757 14.1476 16.6472C14.8377 16.2446 15.6883 16.1461 16.393 16.5227L17.0422 16.8698C17.2527 16.9907 17.5053 16.9504 17.6738 16.7891C18.7264 15.7005 19.4842 14.4102 19.9895 12.9586C20.0316 12.757 19.9474 12.515 19.7369 12.3941ZM10.0109 13.2005C8.1162 13.2005 6.64257 11.7893 6.64257 9.97478C6.64257 8.20063 8.1162 6.74905 10.0109 6.74905C11.8634 6.74905 13.3792 8.20063 13.3792 9.97478C13.3792 11.7893 11.8634 13.2005 10.0109 13.2005Z"
+									fill="#2A7BE4"></path>
+							</svg></span></span></span></div>
+		</div><small
+			class="text-uppercase text-primary fw-bold bg-soft-primary py-2 pe-2 ps-1 rounded-end">customize</small>
+	</div>
+</a>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<script src="../../assets/faliactyl/vendors/popper/popper.min.js"></script>
+<script src="../../assets/faliactyl/vendors/bootstrap/bootstrap.min.js"></script>
+<script src="../../assets/faliactyl/vendors/anchorjs/anchor.min.js"></script>
+<script src="../../assets/faliactyl/vendors/is/is.min.js"></script>
+<script src="../../assets/faliactyl/vendors/echarts/echarts.min.js"></script>
+<script src="../../assets/faliactyl/vendors/fontawesome/all.min.js"></script>
+<script src="../../assets/faliactyl/vendors/lodash/lodash.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+<script src="../../assets/faliactyl/vendors/list.js/list.min.js"></script>
+<script src="../../assets/faliactyl/assets/js/theme.js"></script>
 </body>
+
 </html>
+  
+
+</body>
+
+</html>
+ 

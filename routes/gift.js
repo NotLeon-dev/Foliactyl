@@ -1,7 +1,8 @@
 const settings = require('../handlers/readSettings').settings();
 
 if (settings.api.client.allow.gift == true) {
-module.exports.load = async function(app, ejs, db) {
+    const db = require("../handlers/database")
+    module.exports.load = async function(app, ejs, olddb) {
     app.get("/gift/coins", async (req, res) => {
         if (!req.session.pterodactyl) return res.redirect("/login?redirect=gift");
         if (!req.query.id || !req.query.coins) return res.redirect("/gift?error=MISSING_INFO");

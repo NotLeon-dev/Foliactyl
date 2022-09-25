@@ -1,15 +1,16 @@
-
 const indexjs = require("../index.js");
 const ejs = require("ejs");
 const express = require("express");
 const settings = require('../handlers/readSettings').settings();
 const fetch = require('node-fetch');
+const chalk = require('chalk')
 
-module.exports.load = async function(app, ejs, db) {
+const db = require("../handlers/database")
+module.exports.load = async function(app, ejs, olddb) {
   app.all("/", async (req, res) => {
-    if (req.session.pterodactyl) if (req.session.pterodactyl.id !== await db.get("users-" + req.session.userinfo.id)) return res.redirect("/login?prompt=none")
+    if (req.session.pterodactyl) if (req.session.pterodactyl.id !== await db.get("users-" + req.session.userinfo.id)) return res.redirect("/")
     let theme = indexjs.get(req);
-    if (theme.settings.mustbeloggedin.includes(req._parsedUrl.pathname)) if (!req.session.userinfo || !req.session.pterodactyl) return res.redirect("/login");
+    if (theme.settings.mustbeloggedin.includes(req._parsedUrl.pathname)) if (!req.session.userinfo || !req.session.pterodactyl) return res.redirect("/");
     if (theme.settings.mustbeadmin.includes(req._parsedUrl.pathname)) {
       ejs.renderFile(
         `./themes/${theme.name}/${theme.settings.notfound}`, 

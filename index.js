@@ -3,12 +3,12 @@
 // Load packages.
 
 const fs = require("fs");
-const fetch = require('node-fetch');
 const chalk = require("chalk");
 const figlet = require('figlet')
 const yaml = require('js-yaml');
 const glob = require('glob');
-const arciotext = (require("./routes/arcio.js")).text;
+const arciotext = (require("./pages/arciotext"));
+const fetch = require("node-fetch")
 
 // Load settings.
 
@@ -72,18 +72,16 @@ app.use(express.json({
   verify: undefined
 }));
 
-console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
-console.log(chalk.magentaBright(figlet.textSync("Faliactyl")));
-console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
-console.log(chalk.magentaBright("[Copyright] © 2022 Hyricon Development"));
-console.log(chalk.magentaBright("[Github] https://github.com/Hyricon-Development/Faliactyl"));
-console.log(chalk.magentaBright("[Discord] https://discord.hyricon.dev"));
-console.log(chalk.magentaBright("[Website] https://hyricon.dev"));
-console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
+let letters = ["*", "-", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "]
+let srt = ""
+for (var i = 0; i < 10000; i++) {
+  srt += letters[Math.floor(Math.random() * letters.length)] + " ";
+}
+console.log(srt)
 
 app.listen(settings.website.port, (err) => {
-  console.log(chalk.magentaBright(`[Faliactyl] Loaded Dashboard on the port ${settings.website.port}`));
-  console.log(chalk.blue("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
+  console.log(chalk.green(figlet.textSync("Faliactyl")));
+  console.log(chalk.blue(`[Faliactyl] The client has successfully loaded on port ${settings.website.port}`));
   if (err) console.log(chalk.red(err));
 });
 
@@ -106,44 +104,6 @@ app.use(async (req, res, next) => {
 
     return;
   }
-
-  let manager = {
-    "/callback": 2,
-    "/create": 1,
-    "/delete": 1,
-    "/modify": 1,
-    "/updateinfo": 1,
-    "/setplan": 2,
-    "/admin": 1,
-    "/regen": 1,
-    "/renew": 1,
-    "/api/userinfo": 1,
-    "/userinfo": 2,
-    "/remove_account": 1,
-    "/create_coupon": 1,
-    "/revoke_coupon": 1,
-    "/getip": 1,
-    "/gift/coins": 1,
-    "/gift": 2
-  };
-
-  if (manager[req._parsedUrl.pathname]) {
-    if (cache > 0) {
-      setTimeout(async () => {
-        let allqueries = Object.entries(req.query);
-        let querystring = "";
-        for (let query of allqueries) {
-          querystring = querystring + "&" + query[0] + "=" + query[1];
-        }
-        querystring = "?" + querystring.slice(1);
-        if (querystring == "?") querystring = "";
-        res.redirect((req._parsedUrl.pathname.slice(0, 1) == "/" ? req._parsedUrl.pathname : "/" + req._parsedUrl.pathname) + querystring);
-      }, 1000);
-      return;
-    } else {
-      cache = cache + manager[req._parsedUrl.pathname];
-    }
-  };
   next();
 });
 
@@ -156,13 +116,15 @@ const routes = glob.sync('./routes/**/*.js');
 }
 
 app.all("*", async (req, res) => {
-  if (req.session.pterodactyl) if (req.session.pterodactyl.id !== await db.get(`users-${req.session.userinfo.id}`)) return res.redirect("/login?prompt=none");
+  if (req.session.pterodactyl) if (req.session.pterodactyl.id !== await db.get(`users-${req.session.userinfo.id}`)) return res.redirect("/");
   let theme = indexjs.get(req);
+
+  if (req.session.pterodactyl) if (!await db.get(`arciocoinlimit-${req.session.userinfo.id}`)) await db.set(`arciocointlimit-${req.session.userinfo.id}`, 0)
 
   let newsettings = require('./handlers/readSettings').settings();
   if (newsettings.api.arcio.enabled == true) if (theme.settings.generateafktoken.includes(req._parsedUrl.pathname)) req.session.arcsessiontoken = Math.random().toString(36).substring(2, 15);
   
-  if (theme.settings.mustbeloggedin.includes(req._parsedUrl.pathname)) if (!req.session.userinfo || !req.session.pterodactyl) return res.redirect("/login" + (req._parsedUrl.pathname.slice(0, 1) == "/" ? "?redirect=" + req._parsedUrl.pathname.slice(1) : ""));
+  if (theme.settings.mustbeloggedin.includes(req._parsedUrl.pathname)) if (!req.session.userinfo || !req.session.pterodactyl) return res.redirect("/")
   if (theme.settings.mustbeadmin.includes(req._parsedUrl.pathname)) {
     ejs.renderFile(
       `./themes/${theme.name}/${theme.settings.notfound}`, 
@@ -296,34 +258,14 @@ module.exports.renderdataeval =
     };
     return renderdata;
   })();`;
-
-module.exports.get = function(req) {
-  let defaulttheme = settings.defaulttheme;
-  let tname = encodeURIComponent(getCookie(req, "theme"));
-  let name = (
-    tname ?
-      fs.existsSync(`./themes/${tname}`) ?
-        tname
-      : defaulttheme
-    : defaulttheme
-  )
+  
+module.exports.get = () => {
   return {
-    settings: (
-      fs.existsSync(`./themes/${name}/pages.yml`) ?
-        yaml.load(fs.readFileSync(`./themes/${name}/pages.yml`).toString())
-      : defaultthemesettings
-    ),
-    name: name
+    settings: (yaml.load(fs.readFileSync(`./themes/${settings.defaulttheme}/pages.yml`).toString()) ?? defaultthemesettings),
+    name: (settings.defaulttheme)
   };
 };
 
-module.exports.islimited = async function() {
-  return cache <= 0 ? true : false;
-}
+module.exports.islimited = () => cache <= 0 ? true : false
 
-module.exports.ratelimits = async function(length) {
-  cache = cache + length
-}
-
-// Get a cookie.
-const getCookie = require("./handlers/getCookie");
+module.exports.ratelimits = (length) => cache += length;

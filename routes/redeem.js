@@ -5,7 +5,8 @@ const fs = require("fs");
 const ejs = require("ejs");
 const fetch = require('node-fetch');
 
-module.exports.load = async function(app, ejs, db) {
+const db = require("../handlers/database")
+module.exports.load = async function(app, ejs, olddb) {
   app.get("/coupon_redeem", async (req, res) => {
     if (!req.session.pterodactyl) return res.redirect("/login");
 
@@ -17,16 +18,6 @@ module.exports.load = async function(app, ejs, db) {
 
     let couponinfo = await db.get("coupon-" + code);
 
-    /*
-    {
-      ram: x,
-      disk: x,
-      cpu: x,
-      servers: x,
-      coins: x
-    }
-    */
-
     if (!couponinfo) return res.redirect(theme.settings.redirect.missingorinvalidcouponcode + "?err=INVALIDCOUPONCODE");
 
     await db.delete("coupon-" + code);
@@ -37,18 +28,28 @@ module.exports.load = async function(app, ejs, db) {
       ram: 0,
       disk: 0,
       cpu: 0,
-      servers: 0
+      servers: 0,
+      databases: 0,
+      ports: 0,
+      backups: 0
     };
 
     if (couponinfo.ram) extra.ram = extra.ram + couponinfo.ram;
     if (couponinfo.disk) extra.disk = extra.disk + couponinfo.disk;
     if (couponinfo.cpu) extra.cpu = extra.cpu + couponinfo.cpu;
     if (couponinfo.servers) extra.servers = extra.servers + couponinfo.servers;
+    if (couponinfo.databases) extra.databases = extra.databases + couponinfo.databases;
+    if (couponinfo.ports) extra.ports = extra.ports + couponinfo.ports;
+    if (couponinfo.backups) extra.backups = extra.backups + couponinfo.backups;
+
 
     if (extra.ram > 999999999999999) extra.ram = 999999999999999;
     if (extra.disk > 999999999999999) extra.disk = 999999999999999;
     if (extra.cpu > 999999999999999) extra.cpu = 999999999999999;
     if (extra.servers > 999999999999999) extra.servers = 999999999999999;
+    if (extra.databases > 999999999999999) extra.databases = 999999999999999;
+    if (extra.ports > 999999999999999) extra.ports = 999999999999999;
+    if (extra.backups > 999999999999999) extra.backups = 999999999999999;
 
     await db.set("extra-" + req.session.userinfo.id, extra);
 
@@ -58,7 +59,7 @@ module.exports.load = async function(app, ejs, db) {
     coins = coins + couponinfo.coins;
     await db.set("coins-" + req.session.userinfo.id, coins);
 
-    res.redirect(theme.settings.redirect.successfullyredeemedcoupon + "?err=SUCCESSCOUPONCODE");
+    res.redirect(theme.settings.redirect.successfullyredeemedcoupon + "?sucess=COUPONCODE");
 
     let newsettings = require('../handlers/readSettings').settings();
 

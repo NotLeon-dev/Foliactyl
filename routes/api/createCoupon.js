@@ -1,9 +1,10 @@
 const settings = require('../../handlers/readSettings').settings();
+const db = require("../../handlers/database");
 
 if (settings.api.server.enabled == true) {
-module.exports.load = async function(app, ejs, db) {
+module.exports.load = async function(app, ejs, olddb) {
     app.post("/api/createcoupon", async (req, res) => {
-		if (!req.headers.Authorization || req.headers.Authorization !== `Bearer ${settings.api.server.key}`) return res.send({status: "unauthorized"})
+		if (!req.headers.authorization || req.headers.authorization !== `Bearer ${settings.api.server.key}`) return res.send({status: "unauthorized"})
 
         await db.set(`coupon-${req.body.name}}`, {
 		    coins: req.body.coins,
@@ -15,6 +16,6 @@ module.exports.load = async function(app, ejs, db) {
 			ports: req.body.ports,
 			backups: req.body.backups
 		});
-		return res.send({status: "sucess"})
+		return res.send({status: "success"})
     })
 }}

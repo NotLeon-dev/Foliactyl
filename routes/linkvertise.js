@@ -4,7 +4,8 @@ const btoa = require('../handlers/btoa')
 
 if (settings.linkvertise.enabled == true) {
  
-    module.exports.load = async function(app, ejs, db) {
+    const db = require("../handlers/database")
+    module.exports.load = async function(app, ejs, olddb) {
 
     app.get("/lv/gen", async (req, res) => {
 
@@ -37,18 +38,14 @@ if (settings.linkvertise.enabled == true) {
 
         if (code !== req.session.linkvertise.code) return res.redirect('/lv')
 
-        if (!referer.includes('linkvertise.com')) return res.send('<br> Our systems have detected that you are using a Linkvertise bypasser </br>')
+        if (!referer.includes('linkvertise.com')) return res.redirect("/lv?err=abuse")
 
-        if (((Date.now() - req.session.linkvertise.generated) / 1000) < 50000) {
-            return res.send('<br> Our systems have detected that you are using a Linkvertise bypasser </br>')
-        }
+        if (((Date.now() - req.session.linkvertise.generated) / 1000) < 2) return res.redirect("/lv?err=abuse")
 
         let coins = await db.get(`coins-${req.session.userinfo.id}`);
-        coins = coins + settings.linkvertise.coins;
+        await db.set(`coins-${req.session.userinfo.id}`, coins += settings.linkvertise.coins);
 
-        await db.set(`coins-${req.session.userinfo.id}`, coins);
-
-        req.session.linkvertise.destroy();
+        delete req.session.linkvertise;
 
         return res.redirect('/lv?sucess=true')
     })

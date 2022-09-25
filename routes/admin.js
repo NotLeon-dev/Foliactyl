@@ -11,8 +11,8 @@ const arciotext = (require("./arcio.js")).text;
 const adminjs = require("./admin.js");
 const ejs = require("ejs");
 const chalk = require('chalk');
-
-module.exports.load = async function(app, ejs, db) {
+const db = require("../handlers/database")
+module.exports.load = async function(app, ejs, olddb) {
     app.get("/setcoins", async (req, res) => {
         let theme = indexjs.get(req);
 

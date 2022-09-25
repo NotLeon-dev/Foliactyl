@@ -20,7 +20,7 @@ module.exports.load = async function(app, ejs, db) {
         userinfo = await userinfo.json();
 
         return res.send({
-            status: "sucess",
+            status: "success",
             package: package,
             extra: await db.get(`extra-${req.body.id}`) ? await db.get(`extra-${req.body.id}`) : {
               ram: 0,

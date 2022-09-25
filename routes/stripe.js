@@ -3,8 +3,8 @@ const makeid = require('../handlers/makeid');
 
 if (settings.stripe.enabled == true) {
 const stripe = require('stripe')(settings.stripe.key);
-
-module.exports.load = async function(app, ejs, db) {
+const db = require("../handlers/database")
+module.exports.load = async function(app, ejs, olddb) {
   app.get("/buycoins", async(req, res) => {
     if (!req.session.pterodactyl) return res.redirect('/login?redirect=buy')
 

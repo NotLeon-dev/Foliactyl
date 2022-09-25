@@ -12,7 +12,7 @@ module.exports.load = async function(app, ejs, db) {
   });
 
   app.get("/regen", async (req, res) => {
-    if (!req.session.pterodactyl) return res.redirect("/login");
+    if (!req.session.pterodactyl) return res.redirect("/");
     
     let newsettings = require('../handlers/readSettings').settings();
 
