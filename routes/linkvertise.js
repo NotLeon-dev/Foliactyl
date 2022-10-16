@@ -15,6 +15,7 @@ if (settings.linkvertise.enabled == true) {
 
         if (!referer) return res.redirect('/lv');
         if (referer.includes('?sucess=true')) referer = referer.split('?sucess=true')[0]
+        if (referer.includes('?err=abuse')) referer = referer.split('?err=abuse')[0]
 
         const code = makeid(8);
         const link = `https://link-to.net/${settings.linkvertise.userid}/${Math.random() * 1000}/dynamic?r=${btoa(encodeURI(`${referer}/redeem?code=${code}`))}`;
