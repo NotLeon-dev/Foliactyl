@@ -65,7 +65,7 @@ Because the ``settings.yml`` file is so large, this page will break down and exp
 name: Faliactyl
 icon: https://cdn.discordapp.com/attachments/998170574843035720/1003467646769057882/unknown.png
 defaulttheme: default
-version: 3.0.0
+version: 3.1.0
 website:
   port: 8080
   secret: Example Secret
