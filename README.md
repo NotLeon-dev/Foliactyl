@@ -25,7 +25,8 @@ To get started, scroll down and follow the guide
 - Email Verifier
 - No login system (if user doesn't login for a number of days, it deletes servers and account.)
 - Anti VPN System
-<<<<<<< HEAD
+- Referral system
+- Blacklist system
 
 # Install Guide
 **Ubuntu and Debian**
