@@ -12,8 +12,20 @@
 	
 	<link rel="stylesheet" href="../../../assets/auth/css/style.css">
 	<link rel="icon" href="<%=settings.icon%>" type="image/png">
-
 	</head>
+	<%
+	let referral_code = "none"
+	if (req.query.referral) {
+		referral_code = req.query.referral
+	}
+	%>
+	<% if (req.query.err) { %>
+		<div class="alert alert-warning" role="alert">
+		<% if (req.query.err == "INVALID_REFERRAL") { %>
+			You've entered an invalid Referral code.
+        <% } %>
+	    </div>
+    <% } %>
 	<body class="img js-fullheight" style="background-image: url(../../../assets/auth/images/bg.jpg);">
 	<section class="ftco-section">
 		<div class="container">
@@ -45,7 +57,7 @@
 						let email = encodeURIComponent(document.getElementById("email").value);
                         let username = encodeURIComponent(document.getElementById("username").value);
 						let password = encodeURIComponent(document.getElementById("password").value);
-						document.location.href = `/auth/register?email=${email}&username=${username}&password=${password}`
+						document.location.href = `/auth/register?email=${email}&username=${username}&password=${password}&referral=<%=referral_code%>`
 					};
 				</script>
 	            <div class="form-group d-md-flex">

@@ -12,6 +12,7 @@ const db = require("../../handlers/database")
 module.exports.load = async function(app, ejs, oldb) {
   app.get("/login", async (req, res) => {
     if (req.query.redirect) req.session.redirect = `/${req.query.redirect}`;
+    if (req.query.referral) req.session.referral = req.query.referral
     res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${settings.api.client.oauth2.id}&redirect_uri=${encodeURIComponent(settings.api.client.oauth2.link + settings.api.client.oauth2.callbackpath)}&response_type=code&scope=identify%20email${settings.api.client.bot.joinguild.enabled == true ? "%20guilds.join" : ""}${settings.api.client.j4r.enabled == true ? "%20guilds" : ""}${settings.api.client.oauth2.prompt == false ? "&prompt=none" : (req.query.prompt ? (req.query.prompt == "none" ? "&prompt=none" : "") : "")}`);
   });
 
@@ -19,6 +20,8 @@ module.exports.load = async function(app, ejs, oldb) {
       if (req.query.error && req.query.error == "access denied") return res.send("Unauthorized.")
       const theme = indexjs.get(req);
       let customredirect = req.session.redirect;
+      let referral_code = req.session.referral
+      delete req.session.referral
       delete req.session.redirect;
       if (!req.query.code)
         return res.send("Missing code.");
@@ -65,6 +68,8 @@ module.exports.load = async function(app, ejs, oldb) {
         if (emailVerifier == false) return res.send("You are using an invalid email.")
 
         if (settings.whitelist.enabled == true && !settings.whitelist.users.includes(userinfo.id)) return res.send("Service is under maintenance, try again later.")
+
+        if (settings.blacklist.enabled == true && settings.blacklist.users.include(userinfo.id)) return res.send("You have been blacklisted from this service.")
 
         let guildsjson = await fetch(
           'https://discord.com/api/users/@me/guilds',
@@ -218,7 +223,26 @@ module.exports.load = async function(app, ejs, oldb) {
                 type: "discord",
                 discord_id: userinfo.discord_id
               }
+              const userReferralCode = makeid(8)
+              userinfo.referral_code = userReferralCode
+              await db.set(`referral-${userReferralCode}`, {
+                email: userinfo.id,
+                uses: 0,
+                code: userReferralCode
+              })
               await db.set(`user-${userinfo.id}`, user)
+
+              if (referral_code) {
+                let referral_data = await db.get(`referral-${referral_code}`)
+                if (!referral_data) return res.redirect("/register?err=INVALID_REFERRAL")
+        
+                const referrer_coins = await db.get(`coins-${referral_data.email}`)
+                await db.set(`coins-${referral_data.email}`, referrer_coins + settings.referral.coins)
+                await db.set(`coins-${userinfo.id}`, settings.referral.coins)
+        
+                referral_data.uses += 1;
+                await db.set(`referral-${referral_code}`, referral_data)
+              }
             }
           } else if (user.linked == false && user.type == "email") return res.send("Looks like you've signed up with email and don't have a linked account, try logging in with email instead.")
 

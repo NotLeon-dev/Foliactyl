@@ -117,8 +117,8 @@
 			</nav>
 			<% if (req.query.err) { %>
 				<div class="alert alert-warning" role="alert">
-				<% if (req.query.err == "arcio") { %>
-					Arc.io had a error like always, dont create a ticket about this.
+				<% if (req.query.err == "AFK_LIMIT_REACHED") { %>
+					You've reached your daily limit for earning coins via AFK Page.
 				</div>
 	<% } %>
 		<% } %>

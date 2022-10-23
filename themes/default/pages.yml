@@ -41,7 +41,7 @@ redirect:
   failedpurchasebackups: "/store"
   purchaseallocations: "/store"
   failedpurchaseallocations: "/store"
-  arcioerror: "/dashboard"
+  arcioerror: "/dashboard?err=AFK_LIMIT_REACHED"
   missingorinvalidcouponcode: "/redeem"
   successfullyredeemedcoupon: "/redeem"
   couponcreationfailed: "/admin"
@@ -68,6 +68,9 @@ pages:
   accounts: accounts.ejs
   faq: faq.ejs
   settings: accounts.ejs
+  referral: ./referral/index.ejs
+  reset/password: ./reset/request.ejs
+  reset/password/form: ./reset/password.ejs
 
 mustbeloggedin:
   - "/dashboard"
@@ -84,6 +87,7 @@ mustbeloggedin:
   - "/accounts"
   - "/faq"
   - "/settings"
+  - "/referral"
 
 mustbeadmin:
   - "/admin"

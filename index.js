@@ -7,7 +7,7 @@ const chalk = require("chalk");
 const figlet = require('figlet')
 const yaml = require('js-yaml');
 const glob = require('glob');
-const arciotext = (require("./pages/arciotext"));
+const arciotext = (require("./routes/arcio.js")).text;
 const fetch = require("node-fetch")
 
 // Load settings.
@@ -45,6 +45,7 @@ const indexjs = require("./index.js");
 // Sets up saving session data.
 
 const sqlite = require("better-sqlite3");
+const database = require("./handlers/database");
 const SqliteStore = require("better-sqlite3-session-store")(session);
 const session_db = new sqlite("sessions.db");
 
@@ -205,6 +206,8 @@ app.all("*", async (req, res) => {
   });
 });
 
+// AFK Party
+
 let partymode = ({users: 1, status: false});
 if (settings["AFK Party"].enabled == true) {
   setInterval( async function () { 
@@ -247,6 +250,11 @@ module.exports.renderdataeval =
       extra: theme.settings.variables
     };
     if (typeof(partymode) != "undefined") renderdata.partymode = partymode;
+    if (req.session.userinfo) {
+      let user = await db.get("user-" + req.session.userinfo.id)
+      let referral = await db.get("referral-" + user.referral_code)
+      renderdata.referral = referral
+    }
     if (typeof(arciotext) != "undefined") if (settings.api.arcio.enabled == true && req.session.arcsessiontoken) {
       renderdata.arcioafktext = JavaScriptObfuscator.obfuscate(\`
         let token = "\${req.session.arcsessiontoken}";

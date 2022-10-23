@@ -20,8 +20,8 @@ guildblacklist:
   - ServerID
 
 pterodactyl:
-  domain: Domain
-  key: Key
+  domain: https://panel.example.com
+  key: API KEY
 
 storelimits:
   ram: 8192
@@ -32,40 +32,41 @@ storelimits:
   backups: 4
 
 AFK Party: 
-  enabled: true
+  enabled: false
   webhook: ""
   users: 1
   multiplier: 2	
 
 linkvertise:
-  enabled: true
-  userid: 390178
+  enabled: false
+  userid: 00000
   coins: 25
 
 status:
-  enabled: true
+  enabled: false
   script: https://example.com
 
 stripe:
-  enabled: true  
+  enabled: false  
   key: 0000000000 # Replace this with your Stripe API Key
   coins: 200 # Coins per amount in USD
   amount: 1
 
 smtp:
-  enabled: false
-  host: Example Host
-  port: 7080
-  username: Example Username
-  password: Example Password
+  enabled: true
+  mailfrom: support@example.com
+  host: mail.example.com
+  port: 465
+  username: support@example.net
+  password: PASSWORD
 
 api:
   server:
-    enabled: true
+    enabled: false
     key: API KEY
   client:
     j4r: 
-      enabled: true
+      enabled: false
       ads:
       - name: Example Server 1
         id: 933803406513012807
@@ -95,7 +96,7 @@ api:
     webhook:
       webhook_url: ""
       auditlogs:
-        enabled: true
+        enabled: false
         disabled: []
 
     passwordgenerator:
@@ -114,7 +115,7 @@ api:
     oauth2: # Discord OAUTH2
       id: ""
       secret: ""
-      link: "http://localhost:8080"
+      link: "http://localhost:8080" # This link is used for many other features, make sure it is the dashboard URL.
       callbackpath: "/callback"
       prompt: true
     
@@ -137,12 +138,12 @@ api:
 
     locations:
       '1':
-        name: 🇮🇳 - Banglore
+        name: EXAMPLE LOCATION
         package: null
 
     eggs:
-      MetricNodes Software:
-        display: MetricNodes Software
+      paper:
+        display: Minecraft Java (Paper)
         minimum:
           ram: 512
           disk: 512
@@ -153,39 +154,16 @@ api:
           cpu: 400
         info:
           egg: 15
-          docker_image: quay.io/devil38/catactyl:multiarch
-          startup: ./minecraft.sh
+          docker_image: ghcr.io/pterodactyl/yolks:java_17
+          startup: java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}
           environment:
-            NODEJS_VERSION: "14"
-            PYTHON_VERSION: ""
-            MAPNAME: Ancient
-            OVERRIDE_PASSWORD: change-test
-            SERVER_NAME: RAGE:MP Unofficial server
-            MAX_PLAYERS: "50"
-            ANNOUNCE: "0"
-            REDIS_PASSWORD: replace-this
-            FILE_TRANSFER: ""
-            JAVA_ARGUMENT: ""
-            COMPILE_FOLDER: ""
-            GENERIC_BOT_FILE: ""
-            GENERIC_PACKAGE: ""
-            HTTP_PORT: ""
-            ASE_PORT: ""
-            T_MAX_PLAYERS: ""
-            T_DIFFICULTY: ""
-            MOTD: ""
-            T_LANGUAGE: ""
-            T_WORLD_NAME: ""
-            T_WORLD_SIZE: ""
-            MINDUSTRY_SERVER_NAME: ""
-            MINIO_STARTUP_TYPE: ""
-            TEA_QUERY_PORT: ""
-            TEA_FILE_PORT: ""
-            JAVA_VERSION_SELECT: "17"
-            SRCDS_MAP: ""
+            MINECRAFT_VERSION: "latest"
+            SERVER_JARFILE: "server.jar"
+            DL_PATH: ""
+            BUILD_NUMBER: "latest"
           feature_limits:
-            databases: 0
-            backups: 0
+            databases: 2
+            backups: 2
 
     coins:
       enabled: true
@@ -218,22 +196,30 @@ api:
     key: Minero Public Key
 
   arcio:
-    enabled: true
-    widgetid: VmfQD6oE
+    enabled: false
+    widgetid: WIDGETID
     afk page:
-      enabled: true
-      path: afkwspath
+      enabled: false
+      path: faliactyl_endpoint1
       every: 10
       coins: 1
       coinlimit: 50 # Daily coin limit, set to 0 if you want to disable it.
+
+referral:
+  coins: 1000 # Replace coins with how many coins you want the user and the person who invited the user to receive.
 
 whitelist:
   enabled: false
   users:
     - Email Address
 
+blacklist:
+  enabled: false
+  users:
+    - Email Address
+
 nologin:
-  enabled: true # Suspends and Deletes servers if the user doesn't login for amount of days.
+  enabled: false # Suspends user if user doesn't login after amount of days
   days: 7
 
 servercreation:
@@ -245,7 +231,7 @@ renewal:
   delay: 3 
 
 AntiVPN:
-  enabled: true
+  enabled: false
   key: KEY
   whitelistedIPs:
     - IP Address

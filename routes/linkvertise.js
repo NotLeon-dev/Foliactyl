@@ -40,7 +40,7 @@ if (settings.linkvertise.enabled == true) {
 
         if (!referer.includes('linkvertise.com')) return res.redirect("/lv?err=abuse")
 
-        if (((Date.now() - req.session.linkvertise.generated) / 1000) < 2) return res.redirect("/lv?err=abuse")
+        if (((Date.now() - req.session.linkvertise.generated) / 1000) < 15) return res.redirect("/lv?err=abuse")
 
         let coins = await db.get(`coins-${req.session.userinfo.id}`);
         await db.set(`coins-${req.session.userinfo.id}`, coins += settings.linkvertise.coins);
