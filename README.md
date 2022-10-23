@@ -394,7 +394,7 @@ IMPORTANT NOTES:
   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
   Donating to EFF:                    https://eff.org/donate-le
 ```
-If what you saw isn't similar to what you saw in your server, we recommend you ask for support on [https://discord.gg/TYCRTGMmHK](Faliactyl Discord Server)
+If what you saw isn't similar to what you saw in your server, we recommend you ask for support on Faliactyl Discord Server: https://discord.gg/TYCRTGMmHK
 
 Next, if everything's going correctly, you need to go to the Nginx sites directory and create a configuration file:
 ```
@@ -451,6 +451,4 @@ You can check logs using:
 ```
 pm2 logs
 ```
-If you need help installing, we recommend you ask for support on [https://discord.gg/TYCRTGMmHK](Faliactyl Discord Server)
-=======
->>>>>>> d49e1a01e608e59b562298a51de526b9fa04a27d
+If you need help installing, we recommend you ask for support on Faliactyl Discord Server: https://discord.gg/TYCRTGMmHK
