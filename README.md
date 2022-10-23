@@ -1,5 +1,4 @@
-<br>
-Faliactyl V3 • The best Pterodactyl Control Panel
+# Faliactyl V3 • The best Pterodactyl Control Panel
 Making a free or paid host and need a way for users to sign up, earn coins, manage servers? Try out Faliactyl.
 To get started, scroll down and follow the guide
 
@@ -26,6 +25,7 @@ To get started, scroll down and follow the guide
 - Email Verifier
 - No login system (if user doesn't login for a number of days, it deletes servers and account.)
 - Anti VPN System
+<<<<<<< HEAD
 
 # Install Guide
 **Ubuntu and Debian**
@@ -452,3 +452,5 @@ You can check logs using:
 pm2 logs
 ```
 If you need help installing, we recommend you ask for support on [https://discord.gg/TYCRTGMmHK](Faliactyl Discord Server)
+=======
+>>>>>>> d49e1a01e608e59b562298a51de526b9fa04a27d
