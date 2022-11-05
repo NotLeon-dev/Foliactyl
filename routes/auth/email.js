@@ -14,7 +14,7 @@ module.exports.load = async function(app, ejs, olddb) {
         if (user.password !== req.query.password) return res.send({error: "Invalid Email or Password."});
         if (user.linked == false && user.type == "discord") return res.send("Looks like you've signed up with discord and don't have a linked account, try logging in with discord instead.")
         
-        if (settings.blacklist.enabled == true && settings.blacklist.users.include(req.query.email)) return res.send("You have been blacklisted from this service.")
+        if (settings.blacklist.enabled == true && settings.blacklist.users.includes(req.query.email)) return res.send("You have been blacklisted from this service.")
 
         let ip = (settings.api.client.ip["trust x-forwarded-for"] == true ? (req.headers['x-forwarded-for'] || req.connection.remoteAddress) : req.connection.remoteAddress);
       ip = (ip ? ip : "::1").replace(/::1/g, "::ffff:127.0.0.1").replace(/^.*:/, '');
@@ -74,7 +74,7 @@ module.exports.load = async function(app, ejs, olddb) {
       const emailVerifier = await emailCheck(req.query.email)
       if (emailVerifier == false) return res.send("You are using an invalid email.")
 
-      if (settings.blacklist.enabled == true && settings.blacklist.users.include(req.query.email)) return res.send("You have been blacklisted from this service.")
+      if (settings.blacklist.enabled == true && settings.blacklist.users.includes(req.query.email)) return res.send("You have been blacklisted from this service.")
 
       let ip = (settings.api.client.ip["trust x-forwarded-for"] == true ? (req.headers['x-forwarded-for'] || req.connection.remoteAddress) : req.connection.remoteAddress);
       ip = (ip ? ip : "::1").replace(/::1/g, "::ffff:127.0.0.1").replace(/^.*:/, '');

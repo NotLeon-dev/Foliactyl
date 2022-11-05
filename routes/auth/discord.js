@@ -69,7 +69,7 @@ module.exports.load = async function(app, ejs, oldb) {
 
         if (settings.whitelist.enabled == true && !settings.whitelist.users.includes(userinfo.id)) return res.send("Service is under maintenance, try again later.")
 
-        if (settings.blacklist.enabled == true && settings.blacklist.users.include(userinfo.id)) return res.send("You have been blacklisted from this service.")
+        if (settings.blacklist.enabled == true && settings.blacklist.users.includes(userinfo.id)) return res.send("You have been blacklisted from this service.")
 
         let guildsjson = await fetch(
           'https://discord.com/api/users/@me/guilds',

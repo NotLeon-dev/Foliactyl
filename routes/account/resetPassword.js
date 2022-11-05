@@ -1,5 +1,6 @@
-const mailer = require("../../handlers/mailer").mailer();
 const settings = require("../../handlers/readSettings").settings();
+if (settings.smtp.enabled == true) {
+const mailer = require("../../handlers/mailer").mailer();
 const db = require("../../handlers/database");
 const makeid = require("../../handlers/makeid");
 
@@ -39,4 +40,5 @@ module.exports.load = async function(app, ejs, olddb) {
 
         return res.redirect("/?success=RESET_PASSWORD")
     })
+}
 }

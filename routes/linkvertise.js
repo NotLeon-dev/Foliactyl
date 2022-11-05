@@ -43,7 +43,7 @@ if (settings.linkvertise.enabled == true) {
 
         if (((Date.now() - req.session.linkvertise.generated) / 1000) < 15) return res.redirect("/lv?err=abuse")
 
-        let coins = await db.get(`coins-${req.session.userinfo.id}`);
+        let coins = await db.get(`coins-${req.session.userinfo.id}`) ?? 0;
         await db.set(`coins-${req.session.userinfo.id}`, coins += settings.linkvertise.coins);
 
         delete req.session.linkvertise;
