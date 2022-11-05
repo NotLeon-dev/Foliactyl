@@ -214,7 +214,7 @@ module.exports.load = async function(app, ejs, oldb) {
           const user = await db.get(`user-${userinfo.id}`)
           if (!user) {
             if (settings.api.client.allow.newusers == true) {
-              const user = { 
+              let user = { 
                 username: userinfo.username,
                 id: userinfo.id,
                 password: makeid(8),
@@ -224,6 +224,7 @@ module.exports.load = async function(app, ejs, oldb) {
                 discord_id: userinfo.discord_id
               }
               const userReferralCode = makeid(8)
+              user.referral_code = userReferralCode
               userinfo.referral_code = userReferralCode
               await db.set(`referral-${userReferralCode}`, {
                 email: userinfo.id,
