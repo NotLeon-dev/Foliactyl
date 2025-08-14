@@ -1,4 +1,4 @@
-# Faliactyl V3 • The best Pterodactyl Control Panel
+# Foliactyl V1 • The best Pterodactyl Control Panel
 Making a free or paid host and need a way for users to sign up, earn coins, manage servers? Try out Faliactyl.
 To get started, scroll down and follow the guide
 
