@@ -1,12 +1,12 @@
 {
-  "name": "Faliactyl",
-  "version": "3.1.2",
+  "name": "foliactyl",
+  "version": "4.0.0",
   "main": "index.js",
-  "author": "Zircon Development",
+  "author": "Leonres",
+  "type": "module",
   "dependencies": {
-    "better-sqlite3": "^7.5.3",
-    "better-sqlite3-session-store": "^0.0.3",
-    "chalk": "^4.1.0",
+    "@libsql/client": "^0.5.0",
+    "chalk": "^5.3.0",
     "figlet": "^1.5.0",
     "discord.js": "^12.5.3",
     "ejs": "^3.1.6",

@@ -1,18 +1,18 @@
-let settings = require('../handlers/readSettings').settings();
+import { settings as loadSettings } from '../handlers/readSettings.js';
+import fetch from 'node-fetch';
+import fs from 'fs';
+import * as indexjs from '../index.js';
+import { text as arciotext } from './arcio.js';
+import ejs from 'ejs';
+import chalk from 'chalk';
+import db from '../handlers/database.js';
 
-if (settings.pterodactyl) if (settings.pterodactyl.domain) {
-    if (settings.pterodactyl.domain.slice(-1) == "/") settings.pterodactyl.domain = settings.pterodactyl.domain.slice(0, -1);
-};
+const settings = loadSettings();
+if (settings.pterodactyl?.domain) {
+    if (settings.pterodactyl.domain.slice(-1) == '/') settings.pterodactyl.domain = settings.pterodactyl.domain.slice(0, -1);
+}
 
-const fetch = require('node-fetch');
-const fs = require("fs");
-const indexjs = require("../index.js");
-const arciotext = (require("./arcio.js")).text;
-const adminjs = require("./admin.js");
-const ejs = require("ejs");
-const chalk = require('chalk');
-const db = require("../handlers/database")
-module.exports.load = async function(app, ejs, olddb) {
+export async function load(app, ejs, olddb) {
     app.get("/setcoins", async (req, res) => {
         let theme = indexjs.get(req);
 
@@ -56,7 +56,7 @@ module.exports.load = async function(app, ejs, olddb) {
         let successredirect = theme.settings.redirect.setcoins || "/";
         res.redirect(successredirect + "?err=none");
 
-        let newsettings = require('../handlers/readSettings').settings();
+    let newsettings = loadSettings();
 
         if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
             let username = cacheaccountinfo.attributes.username;
@@ -844,16 +844,11 @@ module.exports.load = async function(app, ejs, olddb) {
         if (newsettings.pterodactyl.domain.slice(-1) == "/")
           newsettings.pterodactyl.domain = newsettings.pterodactyl.domain.slice(0, -1);
         
-        let packagename = await db.get("package-" + req.query.id);
-        let package = newsettings.api.client.packages.list[packagename ? packagename : newsettings.api.client.packages.default];
-        if (!package) package = {
-          ram: 0,
-          disk: 0,
-          cpu: 0,
-          servers: 0
-        };
-    
-        package["name"] = packagename;
+    let packagename = await db.get("package-" + req.query.id);
+    let pkg = newsettings.api.client.packages.list[packagename ? packagename : newsettings.api.client.packages.default];
+    if (!pkg) pkg = { ram: 0, disk: 0, cpu: 0, servers: 0 };
+
+    pkg["name"] = packagename;
     
         let pterodactylid = await db.get("users-" + req.query.id);
         let userinforeq = await fetch(
@@ -871,9 +866,9 @@ module.exports.load = async function(app, ejs, olddb) {
         }
         let userinfo = await userinforeq.json();
     
-        res.send({
-          status: "success",
-          package: package,
+                res.send({
+                    status: "success",
+                    package: pkg,
           extra: await db.get("extra-" + req.query.id) ? await db.get("extra-" + req.query.id) : {
             ram: 0,
             disk: 0,
@@ -933,8 +928,8 @@ module.exports.load = async function(app, ejs, olddb) {
         }
         let userinfo = JSON.parse(await userinforeq.text());
 
-        let packagename = await db.get("package-" + discordid);
-        let package = newsettings.api.client.packages.list[packagename || newsettings.api.client.packages.default];
+    let packagename = await db.get("package-" + discordid);
+    let pkg = newsettings.api.client.packages.list[packagename || newsettings.api.client.packages.default];
 
         let extra = 
             await db.get("extra-" + discordid) ||
@@ -946,10 +941,10 @@ module.exports.load = async function(app, ejs, olddb) {
             };
 
         let plan = {
-            ram: package.ram + extra.ram,
-            disk: package.disk + extra.disk,
-            cpu: package.cpu + extra.cpu,
-            servers: package.servers + extra.servers
+            ram: pkg.ram + extra.ram,
+            disk: pkg.disk + extra.disk,
+            cpu: pkg.cpu + extra.cpu,
+            servers: pkg.servers + extra.servers
         }
 
         let current = {

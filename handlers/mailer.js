@@ -1,23 +1,21 @@
-"use strict";
+import nodemailer from 'nodemailer';
+import { settings } from '../handlers/readSettings.js';
 
-// Load packages.
-const nodemailer = require("nodemailer");
+const settingsData = settings();
 
-// Load Settings
-const settings = require('../handlers/readSettings').settings();
-
-module.exports = {
-  mailer: () => {
-    return mailer
-  }
-}
-
-const mailer = nodemailer.createTransport({
-  host: settings.smtp.host,
-  port: settings.smtp.port,
+const transport = nodemailer.createTransport({
+  host: settingsData.smtp.host,
+  port: settingsData.smtp.port,
   secure: true,
   auth: {
-    user: settings.smtp.username,
-    pass: settings.smtp.password
-  },
+    user: settingsData.smtp.username,
+    pass: settingsData.smtp.password
+  }
 });
+
+export const mailer = transport;
+export default transport;
+
+export function getMailer() {
+  return transport;
+}

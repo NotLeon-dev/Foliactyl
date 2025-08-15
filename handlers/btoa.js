@@ -1,14 +1,12 @@
-module.exports = btoa
-
-function btoa(str) {
+export default function btoa(str) {
     if (str === undefined) return;
-    var buffer;
+    let buffer;
   
     if (str instanceof Buffer) {
-      buffer = str;
+        buffer = str;
     } else {
-      buffer = Buffer.from(str.toString(), "binary");
+        buffer = Buffer.from(str.toString(), "binary");
     }
     return buffer.toString("base64");
-  }
+}
 

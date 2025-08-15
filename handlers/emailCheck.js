@@ -1,8 +1,8 @@
-const validator = require("email-validator");
+import validator from 'email-validator';
 
-module.exports = (email) => {
+export default function emailCheck(email) {
     return new Promise(async resolve => {
-       if (validator.validate(email) == false) return resolve(true)
-	   else return resolve(true)
-    })
+        if (!validator.validate(email)) return resolve(true);
+        else return resolve(true);
+    });
 }

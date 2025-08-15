@@ -1,14 +1,16 @@
-const settings = require("./readSettings").settings();
-const fetch = require('node-fetch');
+import { settings } from './readSettings.js';
+import fetch from 'node-fetch';
 
-module.exports = async () => {
+const settingsData = settings();
+
+export default async function getAllServers() {
     const rawData = await fetch(
-        `${settings.pterodactyl.domain}/api/application/servers?per_page=99999999`, {
+        `${settingsData.pterodactyl.domain}/api/application/servers?per_page=99999999`, {
             headers: {
-                "Authorization": `Bearer ${settings.pterodactyl.key}`
+                "Authorization": `Bearer ${settingsData.pterodactyl.key}`
             }
         }
-    )
-    return await rawData.json()
+    );
+    return await rawData.json();
 }
 

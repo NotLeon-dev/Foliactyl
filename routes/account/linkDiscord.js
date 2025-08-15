@@ -1,5 +1,5 @@
-module.exports.load = async function(app, ejs, db) {
-    app.get("/accounts/link_discord", async (req, res) => {
-        return res.send("This feature has not been completed yet.")
+export async function load(app, ejs, db) {
+    app.get('/accounts/link_discord', async (req, res) => {
+        return res.send('This feature has not been completed yet.')
     })
 }

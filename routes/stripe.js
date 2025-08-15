@@ -1,10 +1,12 @@
-const settings = require('../handlers/readSettings').settings();
-const makeid = require('../handlers/makeid');
+import { settings } from '../handlers/readSettings.js';
+import makeid from '../handlers/makeid.js';
+import Stripe from 'stripe';
+import db from '../handlers/database.js';
 
-if (settings.stripe.enabled == true) {
-const stripe = require('stripe')(settings.stripe.key);
-const db = require("../handlers/database")
-module.exports.load = async function(app, ejs, olddb) {
+const settingsData = settings();
+const stripe = settingsData.stripe.enabled ? new Stripe(settingsData.stripe.key) : null;
+
+export function load(app, ejs, olddb) {
   app.get("/buycoins", async(req, res) => {
     if (!req.session.pterodactyl) return res.redirect('/login?redirect=buy')
 
@@ -51,7 +53,6 @@ module.exports.load = async function(app, ejs, olddb) {
         }).catch(e => console.warn(chalk.red(`[WEBSITE] There was an error sending to the webhook: ${e}`)));
     }
 
-    return res.redirect('/buy?sucess=true')
+    return res.redirect('/buy?success=true');
   });
-}};
-
+}

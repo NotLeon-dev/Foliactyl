@@ -1,7 +1,7 @@
-name: Faliactyl
+name: Foliactyl
 icon: https://cdn.discordapp.com/attachments/998170574843035720/1003467646769057882/unknown.png
 defaulttheme: default
-version: 3.1.2
+version: 4.0.0
 website:
   port: 8080
   secret: Example Secret
