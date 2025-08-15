@@ -1,15 +1,15 @@
-"use strict";
+import { settings as loadSettings } from '../../handlers/readSettings.js';
+import { mailer } from '../../handlers/mailer.js';
+import makeid from '../../handlers/makeid.js';
+import vpnCheck from '../../handlers/vpnCheck.js';
+import emailCheck from '../../handlers/emailCheck.js';
+import fetch from 'node-fetch';
+import * as indexjs from '../../index.js';
+import db from '../../handlers/database.js';
 
-const settings = require('../../handlers/readSettings').settings();
-const mailer = require("../../handlers/mailer").mailer();
-const makeid = require("../../handlers/makeid");
-const vpnCheck = require("../../handlers/vpnCheck");
-const emailCheck = require("../../handlers/emailCheck");
-const fetch = require('node-fetch');
-const indexjs = require("../../index.js");
-const db = require("../../handlers/database")
+const settings = loadSettings();
 
-module.exports.load = async function(app, ejs, oldb) {
+export async function load(app, ejs, oldb) {
   app.get("/login", async (req, res) => {
     if (req.query.redirect) req.session.redirect = `/${req.query.redirect}`;
     if (req.query.referral) req.session.referral = req.query.referral
@@ -37,7 +37,7 @@ module.exports.load = async function(app, ejs, oldb) {
         let codeinfo = JSON.parse(await json.text());
         let scopes = codeinfo.scope;
         let missingscopes = [];
-        let newsettings = require('../../handlers/readSettings').settings();
+  let newsettings = loadSettings();
 
         if (scopes.replace(/identify/g, "") == scopes)
           missingscopes.push("identify");
@@ -88,7 +88,7 @@ module.exports.load = async function(app, ejs, oldb) {
 
           if (settings.AntiVPN.enabled == true && !settings.AntiVPN.whitelistedIPs.includes(ip)) {
             const vpn = await vpnCheck(ip);
-            if (vpn == true) return res.send("Faliactyl has detected that you are using an VPN.")
+            if (vpn == true) return res.send("Foliactyl has detected that you are using a VPN.")
           }
 
           if (newsettings.api.client.ip.block.includes(ip))
@@ -251,69 +251,75 @@ module.exports.load = async function(app, ejs, oldb) {
             if (newsettings.api.client.allow.newusers == true) {
               let genpassword = null;
               if (newsettings.api.client.passwordgenerator.signup == true) genpassword = makeid(newsettings.api.client.passwordgenerator["length"]);
-              let accountjson = await fetch(
-                `${settings.pterodactyl.domain}/api/application/users`,
-                {
-                  method: "post",
-                  headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${settings.pterodactyl.key}`
-                  },
-                  body: JSON.stringify({
-                    username: userinfo.username,
-                    email: userinfo.id,
-                    first_name: userinfo.username,
-                    last_name: `#${userinfo.discriminator}`,
-                    password: genpassword
-                  })
-                }
-              );
-              if (await accountjson.status == 201) {
-                let accountinfo = JSON.parse(await accountjson.text());
-                let userids = await db.get("users") ? await db.get("users") : [];
-                userids.push(accountinfo.attributes.id);
-                await db.set("users", userids);
-                await db.set(`users-${userinfo.id}`, accountinfo.attributes.id);
-                req.session.newaccount = true;
-                req.session.password = genpassword;
-              } else {
-                let accountlistjson = await fetch(
-                  `${settings.pterodactyl.domain}/api/application/users?include=servers&filter[email]=${encodeURIComponent(userinfo.id)}`,
+              try {
+                let accountjson = await fetch(
+                  `${settings.pterodactyl.domain}/api/application/users`,
                   {
-                    method: "get",
+                    method: "post",
                     headers: {
                       'Content-Type': 'application/json',
                       "Authorization": `Bearer ${settings.pterodactyl.key}`
-                    }
+                    },
+                    body: JSON.stringify({
+                      username: userinfo.username,
+                      email: userinfo.id,
+                      first_name: userinfo.username,
+                      last_name: `#${userinfo.discriminator}`,
+                      password: genpassword
+                    })
                   }
                 );
-                let accountlist = await accountlistjson.json();
-                let user = accountlist.data.filter(acc => acc.attributes.email == userinfo.id);
-                if (user.length == 1) {
-                  let userid = user[0].attributes.id;
-                  let userids = await db.get("users") ?? [];
-                  if (userids.filter(id => id == userid).length == 0) {
-                    userids.push(userid);
-                    await db.set("users", userids);
-                    await db.set(`users-${userinfo.id}`, userid);
-                    req.session.pterodactyl = user[0].attributes;
-                  }
+                if (accountjson && accountjson.status == 201) {
+                  let accountinfo = JSON.parse(await accountjson.text());
+                  let userids = await db.get("users") ? await db.get("users") : [];
+                  userids.push(accountinfo.attributes.id);
+                  await db.set("users", userids);
+                  await db.set(`users-${userinfo.id}`, accountinfo.attributes.id);
+                  req.session.newaccount = true;
+                  req.session.password = genpassword;
                 } else {
-                  return res.send("An error has occured when attempting to create your account.");
+                  // attempt to find existing account by email
+                  let accountlistjson = await fetch(
+                    `${settings.pterodactyl.domain}/api/application/users?include=servers&filter[email]=${encodeURIComponent(userinfo.id)}`,
+                    {
+                      method: "get",
+                      headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${settings.pterodactyl.key}`
+                      }
+                    }
+                  );
+                  let accountlist = await accountlistjson.json();
+                  let user = accountlist.data.filter(acc => acc.attributes.email == userinfo.id);
+                  if (user.length == 1) {
+                    let userid = user[0].attributes.id;
+                    let userids = await db.get("users") ?? [];
+                    if (userids.filter(id => id == userid).length == 0) {
+                      userids.push(userid);
+                      await db.set("users", userids);
+                      await db.set(`users-${userinfo.id}`, userid);
+                      req.session.pterodactyl = user[0].attributes;
+                    }
+                  } else {
+                    return res.send("An error has occured when attempting to create your account.");
+                  };
                 };
-              };
-              if (settings.smtp.enabled == true) {
-                mailer.sendMail({
-                  from: settings.smtp.mailfrom,
-                  to: userinfo.email,
-                  subject: `Signup`,
-                  html: `Here are your login details for ${settings.name} Panel:\n Username: ${userinfo.id}\n Email: ${userinfo.email}\n Password: ${genpassword}`
-                });
-              }  
+                if (settings.smtp.enabled == true) {
+                  mailer.sendMail({
+                    from: settings.smtp.mailfrom,
+                    to: userinfo.email,
+                    subject: `Signup`,
+                    html: `Here are your login details for ${settings.name} Panel:\n Username: ${userinfo.id}\n Email: ${userinfo.email}\n Password: ${genpassword}`
+                  });
+                }
+              } catch (err) {
+                console.warn('[PANEL] Unable to contact panel:', err);
+                return res.send('Unable to contact the Pterodactyl panel. Please check the panel URL and API key in settings.yml.');
+              }
             } else {
               return res.send("New users cannot signup currently.");
             }
-          } 
+          }
           await db.set(`username-${userinfo.id}`, userinfo.username);
           await db.set(`lastlogin-${userinfo.id}`, Date.now());
 
@@ -323,16 +329,22 @@ module.exports.load = async function(app, ejs, oldb) {
               await db.set("userlist", userdb);
           }
 
-          let cacheaccount = await fetch(
-            `${settings.pterodactyl.domain}/api/application/users/${await db.get(`users-${userinfo.id}`)}?include=servers`,
-            {
-              method: "get",
-              headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-            }
-          );
-          if (await cacheaccount.statusText == "Not Found")
-            return res.send("An error has occured while attempting to get your user information.");
-          let cacheaccountinfo = JSON.parse(await cacheaccount.text());
+          try {
+            let cacheaccount = await fetch(
+              `${settings.pterodactyl.domain}/api/application/users/${await db.get(`users-${userinfo.id}`)}?include=servers`,
+              {
+                method: "get",
+                headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
+              }
+            );
+            if (cacheaccount && await cacheaccount.statusText == "Not Found")
+              return res.send("An error has occured while attempting to get your user information.");
+            let cacheaccountinfo = JSON.parse(await cacheaccount.text());
+            req.session.pterodactyl = cacheaccountinfo.attributes;
+          } catch (err) {
+            console.warn('[PANEL] Unable to contact panel while fetching user info:', err);
+            return res.send('Unable to contact the Pterodactyl panel. Please check the panel URL and API key in settings.yml.');
+          }
           req.session.pterodactyl = cacheaccountinfo.attributes;
           req.session.userinfo = userinfo;
           if (customredirect) return res.redirect(customredirect);

@@ -1,9 +1,11 @@
-const indexjs = require("../index.js");
-const adminjs = require("./admin.js");
-const settings = require("../handlers/readSettings").settings();
+import * as indexjs from '../index.js';
+import * as adminjs from './admin.js';
+import { settings as loadSettings } from '../handlers/readSettings.js';
+import db from '../handlers/database.js';
 
-const db = require("../handlers/database")
-module.exports.load = async function(app, ejs, olddb) {
+const settings = loadSettings();
+
+export async function load(app, ejs, olddb) {
   app.get("/buyram", async (req, res) => {
     let newsettings = await enabledCheck(req, res);
     if (newsettings) {
@@ -453,7 +455,7 @@ module.exports.load = async function(app, ejs, olddb) {
   });
 
   async function enabledCheck(req, res) {
-    let newsettings = require('../handlers/readSettings').settings();
+    let newsettings = loadSettings();
     if (newsettings.api.client.coins.store.enabled == true) return newsettings;
     let theme = indexjs.get(req);
     ejs.renderFile(

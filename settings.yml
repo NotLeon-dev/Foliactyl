@@ -7,7 +7,7 @@ website:
   secret: Example Secret
 
 discordserver:
-  enabled: true
+  enabled: false
   invitelink: https://discord.com/example
 
 ads:
@@ -113,8 +113,8 @@ api:
         delete: true
 
     oauth2: # Discord OAUTH2
-      id: ""
-      secret: ""
+      id: "1406000824639033556"
+      secret: "TqLo2iLID-7zonGRfCnPhjIM1b7Rn_u0"
       link: "http://localhost:8080" # This link is used for many other features, make sure it is the dashboard URL.
       callbackpath: "/callback"
       prompt: true
@@ -200,7 +200,7 @@ api:
     widgetid: WIDGETID
     afk page:
       enabled: false
-      path: faliactyl_endpoint1
+      path: foliactyl_endpoint1
       every: 10
       coins: 1
       coinlimit: 50 # Daily coin limit, set to 0 if you want to disable it.

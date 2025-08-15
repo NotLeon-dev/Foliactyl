@@ -1,5 +1,5 @@
 # Foliactyl V1 • The best Pterodactyl Control Panel
-Making a free or paid host and need a way for users to sign up, earn coins, manage servers? Try out Faliactyl.
+Making a free or paid host and need a way for users to sign up, earn coins, manage servers? Try out Foliactyl.
 To get started, scroll down and follow the guide
 
 # All features:
@@ -41,10 +41,10 @@ sudo apt install git
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 sudo apt install -y nodejs
 ```
-Now to install Faliactyl and its dependencies   
+Now to install Foliactyl and its dependencies   
 ```
-git clone https://github.com/Zircon-Dev/Faliactyl.git
-cd Faliactyl && npm install
+git clone https://github.com/Zircon-Dev/Foliactyl.git
+cd Foliactyl && npm install
 ```
 **Windows**
 Firstly, make sure that you have all the prerequisites above installed (if you do you can skip this part).
@@ -63,7 +63,7 @@ cd Faliactyl && npm install
 **Configuring your Settings**
 Because the ``settings.yml`` file is so large, this page will break down and explain each individual section.
 ```
-name: Faliactyl
+name: Foliactyl
 icon: https://cdn.discordapp.com/attachments/998170574843035720/1003467646769057882/unknown.png
 defaulttheme: default
 version: 3.1.0
@@ -71,7 +71,7 @@ website:
   port: 8080
   secret: Example Secret
 ```
-The start of the settings file; The ``name`` is the name used for all placeholders. The ``icon`` is used for all page icons. The ``defaulttheme`` is the theme you are using for Faliactyl, default is Falcon. The ``version`` is the Faliactyl version. The ``website port`` is the port that Faliactyl is listening on. The ``website secret`` is a randomly genererated password that you must keep secret as it it is what the dashboards sessions are encrypted with. 
+The start of the settings file; The ``name`` is the name used for all placeholders. The ``icon`` is used for all page icons. The ``defaulttheme`` is the theme you are using for Foliactyl, default is Falcon. The ``version`` is the Foliactyl version. The ``website port`` is the port that Foliactyl is listening on. The ``website secret`` is a randomly genererated password that you must keep secret as it it is what the dashboards sessions are encrypted with. 
 ```
 discordserver:
   enabled: true
@@ -273,7 +273,7 @@ eggs:
         databases: 2
         backups: 2
 ```
-This is the default egg for Faliactyl; You can add more or edit this one.
+This is the default egg for Foliactyl; You can add more or edit this one.
 ```
 coins:
   enabled: true
@@ -383,7 +383,7 @@ Make sure to replace ``<FALIACTYL_DOMAIN>`` with your domain name. If you have d
 ```
 IMPORTANT NOTES:
 - Congratulations! Your certificate and chain have been saved at:
-  /etc/letsencrypt/live/your.faliactyl.domain/fullchain.pem
+  /etc/letsencrypt/live/your.foliactyl.domain/fullchain.pem
   Your key file has been saved at:
   /etc/letsencrypt/live/your.faliactyl.domain/privkey.pem
   Your cert will expire on date. To obtain a new or tweaked
@@ -395,11 +395,11 @@ IMPORTANT NOTES:
   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
   Donating to EFF:                    https://eff.org/donate-le
 ```
-If what you saw isn't similar to what you saw in your server, we recommend you ask for support on Faliactyl Discord Server: https://discord.gg/TYCRTGMmHK
+If what you saw isn't similar to what you saw in your server, we recommend you ask for support on Foliactyl Discord Server: https://discord.gg/TYCRTGMmHK
 
 Next, if everything's going correctly, you need to go to the Nginx sites directory and create a configuration file:
 ```
-nano /etc/nginx/sites-enabled/faliactyl.conf
+nano /etc/nginx/sites-enabled/foliactyl.conf
 ```
 Now paste the following into the file. Make sure to replace ``<DOMAIN>`` and ``<PORT>`` with your Faliactyl domain and the port Faliactyl is running on.
 ```

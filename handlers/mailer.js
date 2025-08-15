@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { settings } from '../handlers/readSettings.js';
+import { settings } from './readSettings.js';
 
 const settingsData = settings();
 
@@ -13,8 +13,15 @@ const transport = nodemailer.createTransport({
   }
 });
 
-export const mailer = transport;
+// Keep a default transport export for direct imports
 export default transport;
+
+// Backwards-compatible function for CommonJS callers that expect mailer()
+export function mailer() {
+  return transport;
+}
+
+export const mailerTransport = transport;
 
 export function getMailer() {
   return transport;

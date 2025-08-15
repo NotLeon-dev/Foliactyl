@@ -137,8 +137,8 @@ for (var i = 0; i < 10000; i++) {
 console.log(srt)
 
 app.listen(settings.website.port, (err) => {
-  console.log(chalk.green(figlet.textSync("Faliactyl")));
-  console.log(chalk.blue(`[Faliactyl] The client has successfully loaded on port ${settings.website.port}`));
+  console.log(chalk.green(figlet.textSync("Foliactyl")));
+  console.log(chalk.blue(`[Foliactyl] The client has successfully loaded on port ${settings.website.port}`));
   if (err) console.log(chalk.red(err));
 });
 
@@ -207,18 +207,33 @@ import vm from 'vm';
 const routeFiles = glob.sync('./routes/**/*.js');
 for (const file of routeFiles) {
   const abs = path.resolve(file);
+
+  // Read file contents early so we can detect ESM-specific syntax before attempting a CJS fallback.
+  let code;
+  try {
+    code = fs.readFileSync(abs, 'utf8');
+  } catch (err) {
+    console.warn(chalk.red('[WEBSITE] Failed to read route file ' + file + ': ' + err));
+    continue;
+  }
+
   try {
     // Try ESM dynamic import first
     const mod = await import(pathToFileURL(abs).href);
     if (mod && typeof mod.load === 'function') await mod.load(app, ejs, indexjs);
     continue;
   } catch (e) {
-    // If import failed, attempt to execute as CommonJS in a sandbox
+    // If import failed and the file contains ESM syntax, it's an ESM module that couldn't be imported.
+    // Log the original import error and skip the CommonJS fallback to avoid parsing ESM as CJS.
+    if (/^\s*(import|export)\b/m.test(code)) {
+      console.warn(chalk.red('[WEBSITE] Failed to import ESM route ' + file + ': ' + e));
+      continue;
+    }
+    // Otherwise, fall back to executing as CommonJS in a sandbox.
   }
 
   try {
-  const code = fs.readFileSync(abs, 'utf8');
-  const require = createRequire(pathToFileURL(abs).href);
+    const require = createRequire(pathToFileURL(abs).href);
     const module = { exports: {} };
     const dirname = path.dirname(abs);
     const script = new vm.Script(`(function(require,module,exports,__filename,__dirname){\n${code}\n})`, { filename: abs });

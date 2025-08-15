@@ -125,7 +125,7 @@ export async function load(app, ejs, olddb) {
         let successredirect = theme.settings.redirect.setcoins || "/";
         res.redirect(successredirect + "?err=none");
 
-        let newsettings = require('../handlers/readSettings').settings();
+    let newsettings = loadSettings();
 
         if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
             let username = cacheaccountinfo.attributes.username;
@@ -234,13 +234,13 @@ export async function load(app, ejs, olddb) {
                 await db.set("extra-" + req.query.id, extra);
             }
 
-            adminjs.suspend(req.query.id);
+            suspend(req.query.id);
 
             // Just copy this and put it in the other endpoints
             let username = cacheaccountinfo.attributes.username;
             let tag = `${cacheaccountinfo.attributes.first_name}${cacheaccountinfo.attributes.last_name}`
 
-            let newsettings = require('../handlers/readSettings').settings();
+            let newsettings = loadSettings();
 
             if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
                 let params = JSON.stringify({
@@ -295,8 +295,8 @@ export async function load(app, ejs, olddb) {
 
         if (!req.query.package) {
             await db.delete("package-" + req.query.id);
-            adminjs.suspend(req.query.id);
-            let newsettings = require('../handlers/readSettings').settings();
+            suspend(req.query.id);
+            let newsettings = loadSettings();
 
             if(newsettings.api.client.webhook.auditlogs.enabled === true && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
                 let id = req.query.id;
@@ -322,10 +322,10 @@ export async function load(app, ejs, olddb) {
 
             return res.redirect(successredirect + "?err=none");
         } else {
-            let newsettings = require('../handlers/readSettings').settings();
+            let newsettings = loadSettings();
             if (!newsettings.api.client.packages.list[req.query.package]) return res.redirect(`${failredirect}?err=INVALIDPACKAGE`);
             await db.set("package-" + req.query.id, req.query.package);
-            adminjs.suspend(req.query.id);
+            suspend(req.query.id);
             
             if(newsettings.api.client.webhook.auditlogs.enabled === true && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
                 let id = req.query.id;
@@ -404,7 +404,7 @@ export async function load(app, ejs, olddb) {
 
         res.redirect(theme.settings.redirect.couponcreationsuccess + "?code=" + code)
 
-        let newsettings = require('../handlers/readSettings').settings();
+    let newsettings = loadSettings();
 
         if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
             let username = cacheaccountinfo.attributes.username;
@@ -456,7 +456,7 @@ export async function load(app, ejs, olddb) {
 
         res.redirect(theme.settings.redirect.couponrevokesuccess + "?revokedcode=true");
         
-        let newsettings = require('../handlers/readSettings').settings();
+    let newsettings = loadSettings();
 
         if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
             let username = cacheaccountinfo.attributes.username;
@@ -543,7 +543,7 @@ export async function load(app, ejs, olddb) {
 
         res.redirect(theme.settings.redirect.removeaccountsuccess + "?success=REMOVEACCOUNT");
 
-        let newsettings = require('../handlers/readSettings').settings();
+    let newsettings = loadSettings();
 
         if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
             let username = cacheaccountinfo.attributes.username;
@@ -648,7 +648,7 @@ export async function load(app, ejs, olddb) {
 
         res.redirect(theme.settings.redirect.couponcreationsuccess + "?code=" + code)
 
-        let newsettings = require('../handlers/readSettings').settings();
+    let newsettings = loadSettings();
 
         if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
             let username = cacheaccountinfo.attributes.username;
@@ -700,7 +700,7 @@ export async function load(app, ejs, olddb) {
 
         res.redirect(theme.settings.redirect.couponrevokesuccess + "?revokedcode=true");
         
-        let newsettings = require('../handlers/readSettings').settings();
+    let newsettings = loadSettings();
 
         if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
             let username = cacheaccountinfo.attributes.username;
@@ -897,15 +897,17 @@ export async function load(app, ejs, olddb) {
         });
     }
 
-    module.exports.suspend = async function(discordid) {
-        let newsettings = require('../handlers/readSettings').settings();
+}
+
+export async function suspend(discordid) {
+        let newsettings = loadSettings();
         if (newsettings.api.client.allow.overresourcessuspend !== true) return;
 
         let canpass = await indexjs.islimited();
         if (canpass == false) {
             setTimeout(
                 async function() {
-                    adminjs.suspend(discordid);
+                    suspend(discordid);
                 }, 1
             )
             return;
@@ -985,7 +987,6 @@ export async function load(app, ejs, olddb) {
             }
         };
     }
-};
 
 function hexToDecimal(hex) {
     return parseInt(hex.replace("#",""), 16)

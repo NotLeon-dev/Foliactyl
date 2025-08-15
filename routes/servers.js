@@ -1,15 +1,16 @@
-const settings = require('../handlers/readSettings').settings();
-const fetch = require('node-fetch');
-const indexjs = require("../index.js");
-const adminjs = require("./admin.js");
-const chalk = require("chalk")
+import { settings as loadSettings } from '../handlers/readSettings.js';
+import fetch from 'node-fetch';
+import * as indexjs from '../index.js';
+import * as adminjs from './admin.js';
+import chalk from 'chalk';
+import db from '../handlers/database.js';
 
+const settings = loadSettings();
 if (settings.pterodactyl) if (settings.pterodactyl.domain) {
-  if (settings.pterodactyl.domain.slice(-1) == "/") settings.pterodactyl.domain = settings.pterodactyl.domain.slice(0, -1);
+  if (settings.pterodactyl.domain.slice(-1) == '/') settings.pterodactyl.domain = settings.pterodactyl.domain.slice(0, -1);
 };
 
-const db = require("../handlers/database")
-module.exports.load = async function(app, ejs, olddb) {
+export async function load(app, ejs, olddb) {
   app.get("/updateinfo", async (req, res) => {
     if (!req.session.pterodactyl) return res.redirect("/login")
     let cacheaccount = await fetch(
@@ -43,7 +44,7 @@ module.exports.load = async function(app, ejs, olddb) {
         }
 
         let packagename = await db.get("package-" + req.session.userinfo.id);
-        let package = newsettings.api.client.packages.list[packagename ? packagename : newsettings.api.client.packages.default];
+  let pkg = newsettings.api.client.packages.list[packagename ? packagename : newsettings.api.client.packages.default];
 
         let extra = 
         await db.get("extra-" + req.session.userinfo.id) ||
@@ -85,7 +86,7 @@ module.exports.load = async function(app, ejs, olddb) {
           backups2 = backups2 + req.session.pterodactyl.relationships.servers.data[i].attributes.feature_limits.backups;
         };
 
-        if (servers2 >= package.servers + extra.servers + j4r.servers) return res.redirect(`${redirectlink}?err=TOOMUCHSERVERS`);
+  if (servers2 >= pkg.servers + extra.servers + j4r.servers) return res.redirect(`${redirectlink}?err=TOOMUCHSERVERS`);
 
         let name = decodeURIComponent(req.query.name);
         if (name.length < 1) return res.redirect(`${redirectlink}?err=LITTLESERVERNAME`);
@@ -95,7 +96,7 @@ module.exports.load = async function(app, ejs, olddb) {
 
         if (Object.entries(newsettings.api.client.locations).filter(vname => vname[0] == location).length !== 1) return res.redirect(`${redirectlink}?err=INVALIDLOCATION`);
 
-        let requiredpackage = Object.entries(newsettings.api.client.locations).filter(vname => vname[0] == location)[0][1].package;
+  let requiredpackage = Object.entries(newsettings.api.client.locations).filter(vname => vname[0] == location)[0][1].package;
         if (requiredpackage) if (!requiredpackage.includes(packagename ? packagename : newsettings.api.client.packages.default)) return res.redirect(`${redirectlink}?err=PREMIUMLOCATION`);
 
 
@@ -110,9 +111,9 @@ module.exports.load = async function(app, ejs, olddb) {
         let ports = parseFloat(req.query.ports)
         let backups = parseFloat(req.query.backups)
         if (!isNaN(ram) && !isNaN(disk) && !isNaN(cpu) && !isNaN(databases) && !isNaN(ports) && !isNaN(backups)) {
-          if (ram2 + ram > package.ram + extra.ram + j4r.ram) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDRAM&num=${package.ram + extra.ram + j4r.ram - ram2}`);
-        if (disk2 + disk > package.disk + extra.disk + j4r.disk) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDDISK&num=${package.disk + extra.disk + j4r.disk - disk2}`);
-        if (cpu2 + cpu > package.cpu + extra.cpu + j4r.cpu) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDCPU&num=${package.cpu + extra.cpu + j4r.cpu - cpu2}`);
+          if (ram2 + ram > pkg.ram + extra.ram + j4r.ram) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDRAM&num=${pkg.ram + extra.ram + j4r.ram - ram2}`);
+  if (disk2 + disk > pkg.disk + extra.disk + j4r.disk) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDDISK&num=${pkg.disk + extra.disk + j4r.disk - disk2}`);
+  if (cpu2 + cpu > pkg.cpu + extra.cpu + j4r.cpu) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDCPU&num=${pkg.cpu + extra.cpu + j4r.cpu - cpu2}`);
           if (egginfo.minimum.ram) if (ram < egginfo.minimum.ram) return res.redirect(`${redirectlink}?err=TOOLITTLERAM&num=${egginfo.minimum.ram}`);
           if (egginfo.minimum.disk) if (disk < egginfo.minimum.disk) return res.redirect(`${redirectlink}?err=TOOLITTLEDISK&num=${egginfo.minimum.disk}`);
           if (egginfo.minimum.cpu) if (cpu < egginfo.minimum.cpu) return res.redirect(`${redirectlink}?err=TOOLITTLECPU&num=${egginfo.minimum.cpu}`);
@@ -219,8 +220,8 @@ module.exports.load = async function(app, ejs, olddb) {
       if (ram || disk || cpu || databases || allocations || backups) {
         let newsettings = require('../handlers/readSettings').settings();
   
-        let packagename = await db.get("package-" + req.session.userinfo.id);
-        let package = newsettings.api.client.packages.list[packagename ? packagename : newsettings.api.client.packages.default];
+  let packagename = await db.get("package-" + req.session.userinfo.id);
+  let pkg = newsettings.api.client.packages.list[packagename ? packagename : newsettings.api.client.packages.default];
   
         let pterorelationshipsserverdata = req.session.pterodactyl.relationships.servers.data.filter(name => name.attributes.id.toString() !== req.query.id);
   
@@ -272,12 +273,12 @@ module.exports.load = async function(app, ejs, olddb) {
         allocations: 0
             };
   
-            if (ram2 + ram > package.ram + extra.ram + j4r.ram) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDRAM&num=${package.ram + extra.ram + j4r.ram - ram2}`);
-            if (disk2 + disk > package.disk + extra.disk + j4r.disk) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDDISK&num=${package.disk + extra.disk + j4r.disk - disk2}`);
-            if (cpu2 + cpu > package.cpu + extra.cpu + j4r.cpu) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDCPU&num=${package.cpu + extra.cpu + j4r.cpu - cpu2}`);
-            if (databases2 + databases > package.databases + extra.databases + j4r.databases) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDDATABASES&num=${package.databases + extra.databases + j4r.databases - databases2}`);
-            if (allocations2 + allocations > package.allocations + extra.allocations + j4r.allocations) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDALLOCATIONS&num=${package.allocations + extra.allocations + j4r.allocations - allocations2}`);
-            if (backups2 + backups > package.backups + extra.backups + j4r.backups) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDBACKUPS&num=${package.backups + extra.backups + j4r.backups - backups2}`);
+            if (ram2 + ram > pkg.ram + extra.ram + j4r.ram) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDRAM&num=${pkg.ram + extra.ram + j4r.ram - ram2}`);
+            if (disk2 + disk > pkg.disk + extra.disk + j4r.disk) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDDISK&num=${pkg.disk + extra.disk + j4r.disk - disk2}`);
+            if (cpu2 + cpu > pkg.cpu + extra.cpu + j4r.cpu) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDCPU&num=${pkg.cpu + extra.cpu + j4r.cpu - cpu2}`);
+            if (databases2 + databases > pkg.databases + extra.databases + j4r.databases) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDDATABASES&num=${pkg.databases + extra.databases + j4r.databases - databases2}`);
+            if (allocations2 + allocations > pkg.allocations + extra.allocations + j4r.allocations) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDALLOCATIONS&num=${pkg.allocations + extra.allocations + j4r.allocations - allocations2}`);
+            if (backups2 + backups > pkg.backups + extra.backups + j4r.backups) return res.redirect(`${redirectlink}?id=${req.query.id}&err=EXCEEDBACKUPS&num=${pkg.backups + extra.backups + j4r.backups - backups2}`);
         if (egginfo.minimum.ram) if (ram < egginfo.minimum.ram) return res.redirect(`${redirectlink}?id=${req.query.id}&err=TOOLITTLERAM&num=${egginfo.minimum.ram}`);
         if (egginfo.minimum.disk) if (disk < egginfo.minimum.disk) return res.redirect(`${redirectlink}?id=${req.query.id}&err=TOOLITTLEDISK&num=${egginfo.minimum.disk}`);
         if (egginfo.minimum.cpu) if (cpu < egginfo.minimum.cpu) return res.redirect(`${redirectlink}?id=${req.query.id}&err=TOOLITTLECPU&num=${egginfo.minimum.cpu}`);

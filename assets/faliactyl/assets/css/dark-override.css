@@ -1,0 +1,28 @@
+/* Minimal dark theme overrides for Foliactyl */
+:root{
+  --bg:#0b0b0d;
+  --panel:#121216;
+  --muted:#9aa1a6;
+  --text:#e6e6e6;
+  --accent:#4b5563;
+}
+html,body{
+  background:var(--bg) !important;
+  color:var(--text) !important;
+}
+.navbar, .card, .modal-content, .footer, .panel, .bg-white{
+  background:linear-gradient(180deg, var(--panel), #0f0f13) !important;
+  color:var(--text) !important;
+  border-color: rgba(255,255,255,0.03) !important;
+}
+a, a:hover, a:focus{
+  color: #cbd5e1 !important;
+}
+.text-muted{ color: var(--muted) !important; }
+.btn-primary{ background: #1f2937 !important; border-color: #374151 !important; color: var(--text) !important; }
+.table thead th{ background:transparent !important; color:var(--muted) !important; }
+.table tbody td{ color:var(--text) !important; }
+input, textarea, select{ background:#0b0b0d !important; color:var(--text) !important; border-color: rgba(255,255,255,0.04) !important; }
+/* small helpers */
+.bg-light{ background:transparent !important; }
+.border{ border-color: rgba(255,255,255,0.03) !important; }
